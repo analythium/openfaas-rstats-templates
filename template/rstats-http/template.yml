@@ -1,0 +1,2 @@
+language: rstats-http
+fprocess: Rscript index.R
