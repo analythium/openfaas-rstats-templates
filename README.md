@@ -6,7 +6,7 @@ templates for the [R](https://www.r-project.org/) language.
 ## Contents
 
 - `/docker-images`: Docker images used by the templates (from `rocker/r-base` with remotes and plumber preinstalled)
-- `rstats-plumber-api`: plumber API with of-watchdog
+- `rstats-plumber-api`: plumber API with of-watchdog (microservice exposing multiple endpoints)
 - `/template`: `rstats` and `rstats-http` templates with classic and of-watchdog
 
 ## Details
@@ -33,6 +33,6 @@ The templates were inspired by and built on these resources:
 - [ ] add `ARG ADDITIONAL_PACKAGE` functionality for system deps: https://docs.openfaas.com/reference/yaml/
 - [ ] add versioning to images
 - [ ] possibly write an R package to replace install.R
-- [ ] move workdir to `/home/app` and use non-root user
+- [x] move workdir to `/home/app` and use non-root user
 - [x] add curl based test (see https://github.com/openfaas/faas/tree/master/sample-functions/BaseFunctions/R)
 - [ ] explore static version for rmarkdown/bookdown/knitr generated html

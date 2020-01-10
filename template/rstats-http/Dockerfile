@@ -1,13 +1,15 @@
 FROM openfaas/of-watchdog:0.7.2 as watchdog
 
-FROM psolymos/r-base-plumber
-#FROM r-base:latest
-#RUN R --vanilla -e 'install.packages("remotes", repos="http://cran.rstudio.com")'
+FROM analythium/r-base-plumber
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-WORKDIR /root/
+# Create a non-root user
+RUN addgroup --system app \
+    && adduser --system --ingroup app app
+
+WORKDIR /home/app
 
 COPY index.R           .
 COPY requirements.txt  .
@@ -16,15 +18,19 @@ RUN Rscript --vanilla install.R requirements.txt
 RUN rm -f install.R
 
 RUN mkdir -p function
-WORKDIR /root/function/
+WORKDIR /home/app/function
 COPY function/requirements.txt  .
 COPY install.R                  .
 RUN Rscript --vanilla install.R requirements.txt
 RUN rm -f install.R
 
-WORKDIR /root/
+WORKDIR /home/app
 
 COPY function           function
+
+RUN chown app:app -R /home/app
+
+USER app
 
 ENV fprocess="Rscript index.R"
 ENV mode="http"

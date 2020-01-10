@@ -1,5 +1,3 @@
 # r-base image with plumber added
 
-```
-docker build -t psolymos/r-base-plumber .
-```
+Use image as `analythium/r-base-plumber`.
