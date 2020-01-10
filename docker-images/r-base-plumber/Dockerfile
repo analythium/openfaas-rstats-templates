@@ -1,4 +1,4 @@
-FROM rocker/r-base
+FROM rocker/r-base:latest
 MAINTAINER Peter Solymos <peter@analythium.io>
 
 RUN apt-get update \
