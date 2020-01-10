@@ -6,7 +6,7 @@ templates for the [R](https://www.r-project.org/) language.
 ## Contents
 
 - `/docker-images`: Docker images used by the templates (from `rocker/r-base` with remotes and plumber preinstalled)
-- `rstats-plumber-api`: plumber API with of-watchdog
+- `rstats-plumber-api`: plumber API with of-watchdog (microservice exposing multiple endpoints)
 - `/template`: `rstats` and `rstats-http` templates with classic and of-watchdog
 
 ## Details
