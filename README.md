@@ -30,9 +30,9 @@ The templates were inspired by and built on these resources:
 ## TODO
 
 - [x] maintain images with remotes+plumber and few utils added
-- [ ] add `ARG ADDITIONAL_PACKAGE` functionality for system deps: https://docs.openfaas.com/reference/yaml/
-- [ ] add versioning to images
-- [ ] possibly write an R package to replace install.R
 - [x] move workdir to `/home/app` and use non-root user
 - [x] add curl based test (see https://github.com/openfaas/faas/tree/master/sample-functions/BaseFunctions/R)
-- [ ] explore static version for rmarkdown/bookdown/knitr generated html
+- [ ] add `ARG ADDITIONAL_PACKAGE` functionality for system deps: https://docs.openfaas.com/reference/yaml/
+- [ ] add versioning to images
+- [ ] possibly write an R package to replace `install.R` and `requirements.txt` or use {renv} (GitHub thinks these are Python packages): https://cran.r-project.org/web/packages/renv/vignettes/docker.html
+- [ ] explore static version for {rmarkdown}/{bookdown}/{knitr} generated html
