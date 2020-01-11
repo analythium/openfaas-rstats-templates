@@ -1,6 +1,6 @@
 # R/plumber API template for OpenFaaS with of-watchdog
 
-Sends and receives JSON using [plumber](https://www.rplumber.io/)
+Sends and receives JSON using [{plumber}](https://www.rplumber.io/)
 and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog).
 
 https://www.openfaas.com/blog/golang-serverless/#new-service-using-a-dockerfile
