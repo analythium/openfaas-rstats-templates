@@ -1,6 +1,13 @@
 FROM openfaas/of-watchdog:0.7.2 as watchdog
 
-FROM analythium/r-base-plumber
+FROM rocker/r-base:latest
+
+# Add here more system dependencies as needed
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git-core libssl-dev libcurl4-gnutls-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN install2.r -e remotes plumber
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -12,19 +19,12 @@ RUN addgroup --system app \
 WORKDIR /home/app
 
 COPY index.R           .
-COPY requirements.txt  .
+COPY PACKAGES          .
 COPY install.R         .
-RUN Rscript --vanilla install.R requirements.txt
+RUN Rscript --vanilla install.R PACKAGES
 RUN rm -f install.R
 
 RUN mkdir -p function
-WORKDIR /home/app/function
-COPY function/requirements.txt  .
-COPY install.R                  .
-RUN Rscript --vanilla install.R requirements.txt
-RUN rm -f install.R
-
-WORKDIR /home/app
 
 COPY function           function
 

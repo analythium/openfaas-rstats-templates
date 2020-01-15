@@ -5,24 +5,24 @@ FROM analythium/r-base-plumber
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-WORKDIR /root/
+# Create a non-root user
+RUN addgroup --system app \
+    && adduser --system --ingroup app app
+
+WORKDIR /home/app
 
 COPY index.R           .
-COPY requirements.txt  .
+COPY PACKAGES          .
 COPY install.R         .
-RUN Rscript --vanilla install.R requirements.txt
+RUN Rscript --vanilla install.R PACKAGES
 RUN rm -f install.R
 
 RUN mkdir -p function
-WORKDIR /root/function/
-COPY function/requirements.txt  .
-COPY install.R                  .
-RUN Rscript --vanilla install.R requirements.txt
-RUN rm -f install.R
-
-WORKDIR /root/
-
 COPY function           function
+
+RUN chown app:app -R /home/app
+
+USER app
 
 ENV fprocess="Rscript index.R"
 ENV mode="http"
