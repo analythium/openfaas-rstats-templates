@@ -12,7 +12,7 @@ templates for the [R](https://www.r-project.org/) language.
 ## Details
 
 The `install.R` installs dependencies as specified in
-`requirements.txt`, one dependency per line, separator is new line.
+`PACKAGES`, one dependency per line, separator is new line.
 [CRAN](https://cran.r-project.org/) packages can be specified by their `name`s, or as `name@version`.
 Remotes can be defined according to specs in the
 [{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) package.
@@ -34,5 +34,5 @@ The templates were inspired by and built on these resources:
 - [x] add curl based test (see https://github.com/openfaas/faas/tree/master/sample-functions/BaseFunctions/R)
 - [ ] add `ARG ADDITIONAL_PACKAGE` functionality for system deps: https://docs.openfaas.com/reference/yaml/
 - [ ] add versioning to images
-- [ ] possibly write an R package to replace `install.R` and `requirements.txt` or use {renv} (GitHub thinks these are Python packages): https://cran.r-project.org/web/packages/renv/vignettes/docker.html
+- [ ] ~~possibly write an R package to replace `install.R` and `PACKAGES` or use {renv} (GitHub thinks these are Python packages): https://cran.r-project.org/web/packages/renv/vignettes/docker.html~~
 - [ ] explore static version for {rmarkdown}/{bookdown}/{knitr} generated html
