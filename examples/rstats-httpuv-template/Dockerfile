@@ -8,20 +8,12 @@ RUN chmod +x /usr/bin/fwatchdog
 WORKDIR /root/
 
 COPY index.R           .
-COPY requirements.txt  .
+COPY PACKAGES          .
 COPY install.R         .
-RUN Rscript --vanilla install.R requirements.txt
+RUN Rscript --vanilla install.R PACKAGES
 RUN rm -f install.R
 
 RUN mkdir -p function
-WORKDIR /root/function/
-COPY function/requirements.txt  .
-COPY install.R                  .
-RUN Rscript --vanilla install.R requirements.txt
-RUN rm -f install.R
-
-WORKDIR /root/
-
 COPY function           function
 
 ENV fprocess="Rscript index.R"
