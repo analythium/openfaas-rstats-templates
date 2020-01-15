@@ -12,9 +12,9 @@ RUN addgroup --system app \
 WORKDIR /home/app
 
 COPY index.R           .
-COPY requirements.txt  .
+COPY PACKAGES          .
 COPY install.R         .
-RUN Rscript --vanilla install.R requirements.txt
+RUN Rscript --vanilla install.R PACKAGES
 RUN rm -f install.R
 
 RUN chown app:app -R /home/app
