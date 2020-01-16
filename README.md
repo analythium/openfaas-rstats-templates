@@ -19,9 +19,9 @@ Kubernetes or Docker Swarm and deploy OpenFaaS
 Follow the official OpenFaaS workshop [here](https://docs.openfaas.com/tutorials/workshop/)
 to get going quickly.
 
-### Making a new function
+### Make a new function
 
-Use the [`faas-cli`](https://docs.openfaas.com/cli/install/) and pull R templates
+Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
 
 ```bash
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
@@ -37,7 +37,7 @@ faas-cli new --lang rstats-http hello-rstats --prefix="<docker-user>"
 ```
 
 the `<docker-user>` means a user or organization on e.g. Docker Hub where
-you have push privileges; don't forget to log in to the registry (`docker login`).
+you have push privileges; don't forget to log in to the registry using `docker login`.
 
 You can build, push, and deploy the `hello-rstats` function using:
 
@@ -54,7 +54,7 @@ curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
 
 Both should should give the JSON output `["Hello Friend!"]`.
 
-### Customizing your function
+### Customize your function
 
 You can now edit `./hello-rstats/function/handler.R` to your liking.
 Don't forget to add dependencies to `./hello-rstats/function/PACKAGES` file.
@@ -72,6 +72,20 @@ This is a grey area of the R package ecosystem, see some helpful pointers
 [here](https://github.com/rstudio/r-system-requirements).
 The templates are using the Debian-based `rocker/r-base` Docker image from the
 [rocker](https://github.com/rocker-org) project.
+
+### Classic or of-watchdog
+
+The `rstats` template uses the classic watchdog.
+The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
+and to invoke your chosen application.
+This is the init process for your container.
+The classic watchdog passes in the HTTP request
+via `stdin` and reads a HTTP response via `stdout`.
+
+The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+provides more control over your HTTP responses ("hot functions", persistent connection pools,
+or caching). This is what the `rstats-http` template is using.
 
 ## Resources
 
