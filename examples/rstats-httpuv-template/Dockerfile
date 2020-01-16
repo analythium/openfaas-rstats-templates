@@ -18,6 +18,14 @@ RUN Rscript --vanilla install.R PACKAGES
 RUN rm -f install.R
 
 RUN mkdir -p function
+WORKDIR /home/app/function
+COPY function/PACKAGES .
+COPY install.R         .
+RUN Rscript --vanilla install.R PACKAGES
+RUN rm -f install.R
+
+WORKDIR /home/app
+
 COPY function           function
 
 RUN chown app:app -R /home/app
