@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git-core libssl-dev libcurl4-gnutls-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN install2.r -e remotes plumber
+RUN install2.r -e remotes
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
