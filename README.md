@@ -1,7 +1,7 @@
-# R/rstats templates for OpenFaaS
+# R (rstats) templates for OpenFaaS
 
-This project provides [OpenFaaS](https://www.openfaas.com/)
-templates for the [R](https://www.r-project.org/) language.
+> This project provides [OpenFaaS](https://www.openfaas.com/)
+> templates for the [R](https://www.r-project.org/) language.
 
 ## Contents
 
@@ -9,14 +9,69 @@ templates for the [R](https://www.r-project.org/) language.
 - `/examples`: various examples using, e.g. the [{httpuv}](https://CRAN.R-project.org/package=httpuv) based template or a [{plumber}](https://CRAN.R-project.org/package=plumber) microservice exposing multiple endpoints
 - `/template`: `rstats` and `rstats-http` templates with [classic](https://github.com/openfaas/faas/tree/master/watchdog) and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
 
-## Details
+## Usage
 
-The `install.R` installs dependencies as specified in
-`PACKAGES`, one dependency per line, separator is new line.
-[CRAN](https://cran.r-project.org/) packages can be specified by their `name`s, or as `name@version`.
+### Setup
+
+It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first and set up
+Kubernetes or Docker Swarm and deploy OpenFaaS
+(see docs [here](https://docs.openfaas.com/deployment/)).
+Follow the official OpenFaaS workshop [here](https://docs.openfaas.com/tutorials/workshop/)
+to get going quickly.
+
+### Making a new function
+
+Use the [`faas-cli`](https://docs.openfaas.com/cli/install/) and pull R templates
+
+```bash
+faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
+```
+
+Now `faas-cli new --list` should give you a list with `rstats` and `rstats-http` among
+the templates.
+
+Let's create a new function called `hello-rstats`:
+
+```bash
+faas-cli new --lang rstats-http hello-rstats --prefix="<docker-user>"
+```
+
+the `<docker-user>` means a user or organization on e.g. Docker Hub where
+you have push privileges; don't forget to log in to the registry (`docker login`).
+
+You can build, push, and deploy the `hello-rstats` function using:
+
+```bash
+faas-cli up -f hello-rstats.yml
+```
+
+Once the function is deployed, you can test it in the UI (at http://localhost:8080/ui/)
+or using curl:
+
+```
+curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
+```
+
+Both should should give the JSON output `["Hello Friend!"]`.
+
+### Customizing your function
+
+You can now edit `./hello-rstats/function/handler.R` to your liking.
+Don't forget to add dependencies to `./hello-rstats/function/PACKAGES` file.
+
+The `install.R` script installs dependencies as specified in the
+`PACKAGES` file: one dependency per line, separator is new line.
+[CRAN](https://cran.r-project.org/) packages can be specified by
+their `name`s, or as `name@version`.
 Remotes can be defined according to specs in the
 [{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) package.
-Base Docker images for R are from the [rocker](https://github.com/rocker-org) project.
+This includes GitHub, GitLab, Bitbucket etc.
+
+You might also have to add system dependencies to the `Dockerfile`.
+This is a grey area of the R package ecosystem, see some helpful pointers
+[here](https://github.com/rstudio/r-system-requirements).
+The templates are using the Debian-based `rocker/r-base` Docker image from the
+[rocker](https://github.com/rocker-org) project.
 
 ## Resources
 
