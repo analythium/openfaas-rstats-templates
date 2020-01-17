@@ -3,11 +3,21 @@
 > This project provides [OpenFaaS](https://www.openfaas.com/)
 > templates for the [R](https://www.r-project.org/) language.
 
-## Contents
+The `/template` folder contains the following OpenFaaS templates:
 
-- `/docker-images`: [Docker](https://www.docker.com) images used by the templates (from [rocker]() images with [{remotes}](https://CRAN.R-project.org/package=remotes) and other packages preinstalled)
-- `/examples`: various examples using, e.g. the [{httpuv}](https://CRAN.R-project.org/package=httpuv) based template or a [{plumber}](https://CRAN.R-project.org/package=plumber) microservice exposing multiple endpoints
-- `/template`: `rstats` and `rstats-http` templates with [classic](https://github.com/openfaas/faas/tree/master/watchdog) and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+- `rstats` with [classic watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+- `rstats-http` [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+
+The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
+and to invoke your chosen application.
+This is the init process for your container.
+The classic watchdog passes in the HTTP request
+via `stdin` and reads a HTTP response via `stdout`.
+
+The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+provides more control over your HTTP responses ("hot functions", persistent connection pools,
+or caching). This is what the `rstats-http` template is using.
 
 ## Usage
 
@@ -72,20 +82,6 @@ This is a grey area of the R package ecosystem, see some helpful pointers
 [here](https://github.com/rstudio/r-system-requirements).
 The templates are using the Debian-based `rocker/r-base` Docker image from the
 [rocker](https://github.com/rocker-org) project.
-
-### Classic or of-watchdog
-
-The `rstats` template uses the classic watchdog.
-The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
-is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
-and to invoke your chosen application.
-This is the init process for your container.
-The classic watchdog passes in the HTTP request
-via `stdin` and reads a HTTP response via `stdout`.
-
-The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
-provides more control over your HTTP responses ("hot functions", persistent connection pools,
-or caching). This is what the `rstats-http` template is using.
 
 ## Resources
 
