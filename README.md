@@ -3,11 +3,21 @@
 > This project provides [OpenFaaS](https://www.openfaas.com/)
 > templates for the [R](https://www.r-project.org/) language.
 
-## Contents
+The `/template` folder contains the following OpenFaaS templates:
 
-- `/docker-images`: [Docker](https://www.docker.com) images used by the templates (from [rocker]() images with [{remotes}](https://CRAN.R-project.org/package=remotes) and other packages preinstalled)
-- `/examples`: various examples using, e.g. the [{httpuv}](https://CRAN.R-project.org/package=httpuv) based template or a [{plumber}](https://CRAN.R-project.org/package=plumber) microservice exposing multiple endpoints
-- `/template`: `rstats` and `rstats-http` templates with [classic](https://github.com/openfaas/faas/tree/master/watchdog) and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+- `rstats` with [classic watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+- `rstats-http` [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+
+The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
+and to invoke your chosen application.
+This is the init process for your container.
+The classic watchdog passes in the HTTP request
+via `stdin` and reads a HTTP response via `stdout`.
+
+The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+provides more control over your HTTP responses ("hot functions", persistent connection pools,
+or caching). This is what the `rstats-http` template is using.
 
 ## Usage
 
@@ -48,7 +58,7 @@ faas-cli up -f hello-rstats.yml
 Once the function is deployed, you can test it in the UI (at http://localhost:8080/ui/)
 or using curl:
 
-```
+```bash
 curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
 ```
 
@@ -56,16 +66,28 @@ Both should should give the JSON output `["Hello Friend!"]`.
 
 ### Customize your function
 
-You can now edit `./hello-rstats/function/handler.R` to your liking.
-Don't forget to add dependencies to `./hello-rstats/function/PACKAGES` file.
+You can now edit `./hello-rstats/handler.R` to your liking.
+Don't forget to add dependencies to `./hello-rstats/PACKAGES` file.
 
-The `install.R` script installs dependencies as specified in the
-`PACKAGES` file: one dependency per line, separator is new line.
+For example, calculate principal components
+based on an input data array using the
+[{vegan}](https://CRAN.R-project.org/package=vegan) R package.
+
+Add the {vegan} package to the `./hello-rstats/PACKAGES` file, which now
+looks like this:
+
+```bash
+jsonlite
+vegan
+```
+
+The template installs dependencies specified in the `PACKAGES` file:
+one dependency per line, separator is new line.
 [CRAN](https://cran.r-project.org/) packages can be specified by
 their `name`s, or as `name@version`.
 Remotes can be defined according to specs in the
-[{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) package.
-This includes GitHub, GitLab, Bitbucket etc.
+[{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html)
+package. This includes GitHub, GitLab, Bitbucket etc.
 
 You might also have to add system dependencies to the `Dockerfile`.
 This is a grey area of the R package ecosystem, see some helpful pointers
@@ -73,19 +95,25 @@ This is a grey area of the R package ecosystem, see some helpful pointers
 The templates are using the Debian-based `rocker/r-base` Docker image from the
 [rocker](https://github.com/rocker-org) project.
 
-### Classic or of-watchdog
+The `./hello-rstats/handler.R` file should look like this:
 
-The `rstats` template uses the classic watchdog.
-The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
-is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
-and to invoke your chosen application.
-This is the init process for your container.
-The classic watchdog passes in the HTTP request
-via `stdin` and reads a HTTP response via `stdout`.
+```bash
+handle <- function(req) {
+  x <- jsonlite::fromJSON(paste(req$postBody))
+  vegan::rda(x)$CA$u
+}
+```
 
-The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
-provides more control over your HTTP responses ("hot functions", persistent connection pools,
-or caching). This is what the `rstats-http` template is using.
+After `faas-cli up -f hello-rstats.yml` we can test the either in the UI or with curl:
+
+```bash
+curl http://localhost:8080/function/hello-rstats -H \
+  "Content-Type: application/json" -d \
+  '[[-1,3,16],[10,-10,9],[-5,10,-14],[14,3,-12]] '
+```
+
+Now you should see the JSON output
+`[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
 
 ## Resources
 
