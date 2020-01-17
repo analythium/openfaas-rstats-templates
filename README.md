@@ -58,7 +58,7 @@ faas-cli up -f hello-rstats.yml
 Once the function is deployed, you can test it in the UI (at http://localhost:8080/ui/)
 or using curl:
 
-```
+```bash
 curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
 ```
 
@@ -66,22 +66,54 @@ Both should should give the JSON output `["Hello Friend!"]`.
 
 ### Customize your function
 
-You can now edit `./hello-rstats/function/handler.R` to your liking.
-Don't forget to add dependencies to `./hello-rstats/function/PACKAGES` file.
+You can now edit `./hello-rstats/handler.R` to your liking.
+Don't forget to add dependencies to `./hello-rstats/PACKAGES` file.
 
-The `install.R` script installs dependencies as specified in the
-`PACKAGES` file: one dependency per line, separator is new line.
+For example, calculate principal components
+based on an input data array using the
+[{vegan}](https://CRAN.R-project.org/package=vegan) R package.
+
+Add the {vegan} package to the `./hello-rstats/PACKAGES` file, which now
+looks like this:
+
+```bash
+jsonlite
+vegan
+```
+
+The template installs dependencies specified in the `PACKAGES` file:
+one dependency per line, separator is new line.
 [CRAN](https://cran.r-project.org/) packages can be specified by
 their `name`s, or as `name@version`.
 Remotes can be defined according to specs in the
-[{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) package.
-This includes GitHub, GitLab, Bitbucket etc.
+[{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html)
+package. This includes GitHub, GitLab, Bitbucket etc.
 
 You might also have to add system dependencies to the `Dockerfile`.
 This is a grey area of the R package ecosystem, see some helpful pointers
 [here](https://github.com/rstudio/r-system-requirements).
 The templates are using the Debian-based `rocker/r-base` Docker image from the
 [rocker](https://github.com/rocker-org) project.
+
+The `./hello-rstats/handler.R` file should look like this:
+
+```bash
+handle <- function(req) {
+  x <- jsonlite::fromJSON(paste(req$postBody))
+  vegan::rda(x)$CA$u
+}
+```
+
+After `faas-cli up -f hello-rstats.yml` we can test the either in the UI or with curl:
+
+```bash
+curl http://localhost:8080/function/hello-rstats -H \
+  "Content-Type: application/json" -d \
+  '[[-1,3,16],[10,-10,9],[-5,10,-14],[14,3,-12]] '
+```
+
+Now you should see the JSON output
+`[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
 
 ## Resources
 
