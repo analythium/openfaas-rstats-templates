@@ -2,8 +2,11 @@ FROM openfaas/of-watchdog:0.7.2 as watchdog
 
 FROM rocker/r-base:latest
 
-# Add here more system dependencies as needed
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Allows you to add additional system dependencies
+ARG ADDITIONAL_PACKAGE
+
+RUN apt-get update && apt-get install -y \
+    --no-install-recommends ${ADDITIONAL_PACKAGE} \
     git-core libssl-dev libcurl4-gnutls-dev \
     && rm -rf /var/lib/apt/lists/*
 
