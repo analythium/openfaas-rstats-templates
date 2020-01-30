@@ -112,7 +112,7 @@ one dependency per line, separator is new line.
 their `name`s, or as `name@version`.
 Remotes can be defined according to specs in the
 [{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html)
-package. This includes GitHub, GitLab, Bitbucket etc.
+package. This includes GitHub, GitLab, Bitbucket, local files, etc.
 
 You might also have to add system dependencies for your required packages.
 This is a grey area of the R package ecosystem, see some helpful pointers
@@ -128,7 +128,7 @@ faas-cli build -f hello-rstats.yml --build-arg ADDITIONAL_PACKAGE="git-core libs
 ```
 
 After pushing and deploying the function,
-we can test the either in the UI or with curl:
+we can test either in the UI or with curl:
 
 ```bash
 curl http://localhost:8080/function/hello-rstats -H \
@@ -139,16 +139,7 @@ curl http://localhost:8080/function/hello-rstats -H \
 Now you should see the JSON output
 `[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
 
-Note that the of-watchdog HTTP mode loads the handler as a
-very small background web server. The classic watchdog's forking mode in
+Note that the of-watchdog _http mode_ loads the handler as a
+small background web server. The classic watchdog's forking mode
 would instead load this file for every invocation creating additional latency
-when loading packages or saved data or rained models.
-
-## Resources
-
-The templates were inspired by and built on these resources:
-
-- https://github.com/openfaas/faas/tree/master/sample-functions/BaseFunctions/R
-- https://medium.com/@beanies/serverless-r-functions-with-openfaas-1cd34905834d
-- https://github.com/openfaas/templates/tree/master/template/python3
-- https://github.com/openfaas-incubator/of-watchdog#1-http-modehttp
+when loading packages, saved data, or trained models.
