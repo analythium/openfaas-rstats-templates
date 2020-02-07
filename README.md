@@ -117,6 +117,7 @@ package. This includes GitHub, GitLab, Bitbucket, local files, etc.
 You might also have to add system dependencies for your required packages.
 This is a grey area of the R package ecosystem, see some helpful pointers
 [here](https://github.com/rstudio/r-system-requirements)
+and [here](https://github.com/r-hub/sysreqs)
 (the templates are using the Debian-based `rocker/r-base` Docker image from the
 [rocker](https://github.com/rocker-org) project).
 
