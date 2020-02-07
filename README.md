@@ -3,6 +3,14 @@
 > This project provides [OpenFaaS](https://www.openfaas.com/)
 > templates for the [R](https://www.r-project.org/) language.
 
+* [Introduction](#introduction)
+* [Usage](#usage)
+  - [Setup](#setup)
+  - [Make a new function](#make-a-new-function)
+  - [Customize your function](#customize-your-function)
+
+## Introduction
+
 The `/template` folder contains the following OpenFaaS templates:
 
 - `rstats` with [classic watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
