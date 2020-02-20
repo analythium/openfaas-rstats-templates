@@ -1,14 +1,5 @@
 FROM openfaas/classic-watchdog:0.18.10 as watchdog
-FROM rocker/r-base:latest
-
-# Allows you to add additional system dependencies
-ARG ADDITIONAL_PACKAGE
-
-RUN apt-get update && apt-get install -y \
-    --no-install-recommends ${ADDITIONAL_PACKAGE} \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN install2.r -e remotes
+FROM rhub/r-minimal:latest
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -21,16 +12,12 @@ WORKDIR /home/app
 
 COPY index.R           .
 COPY PACKAGES          .
-COPY install.R         .
-RUN Rscript --vanilla install.R PACKAGES
-RUN rm -f install.R
+RUN installr -d ""$(tr '\n' '  ' < PACKAGES)""
 
 RUN mkdir -p function
 WORKDIR /home/app/function
 COPY function/PACKAGES .
-COPY install.R         .
-RUN Rscript --vanilla install.R PACKAGES
-RUN rm -f install.R
+RUN installr -d ""$(tr '\n' '  ' < PACKAGES)""
 
 WORKDIR /home/app
 
@@ -40,7 +27,7 @@ RUN chown app:app -R /home/app
 
 USER app
 
-ENV fprocess="Rscript index.R"
+ENV fprocess="R --slave -f index.R"
 EXPOSE 8080
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1

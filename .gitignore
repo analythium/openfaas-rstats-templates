@@ -47,3 +47,6 @@ Temporary Items
 *.Rhistory
 .Rproj.user*
 .Rproj.user
+
+## rstudio project file
+*.Rproj
