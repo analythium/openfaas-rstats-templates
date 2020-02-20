@@ -26,7 +26,7 @@ faas-cli new --lang rstats-minimal <function-name> --prefix="<docker-user>"
 ### Customizing your function
 
 - edit `./<function-name>/function/handler.R`
-- add dependencies include system dependencies to `./PACKAGES`
+- add dependencies include system dependencies to `./function/PACKAGES`
 
 Please read [this](https://github.com/r-hub/r-minimal) for dependoncies.
 

@@ -6,6 +6,7 @@
 The `/template` folder contains the following OpenFaaS templates:
 
 - `rstats` with [classic watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
+- `rstats-minimal` with [r-minimal image](https://github.com/r-hub/r-minimal) using alpine linux
 - `rstats-http` [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
 
 The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
@@ -37,7 +38,7 @@ Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 ```
 
-Now `faas-cli new --list` should give you a list with `rstats` and `rstats-http` among
+Now `faas-cli new --list` should give you a list with `rstats`, `rstats-minimal` and `rstats-http` among
 the templates.
 
 Let's create a new function called `hello-rstats`:
