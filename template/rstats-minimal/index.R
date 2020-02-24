@@ -6,7 +6,7 @@ source("function/handler.R")
 
 f <- file("stdin")
 open(f)
-input <- readLines(f, warn = FALSE, n = 1) # 1st line only
+input <- readLines(f, warn = FALSE, n = -1)
 
 input <- jsonlite::fromJSON(input)
 

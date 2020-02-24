@@ -1,3 +1,4 @@
 handle <- function(req) {
-  list(return = paste0("Hello ", req, "!"))
+  # req is named list from requests convert using jsonlite::fromJSON
+  data.table::data.table(return = paste0("Hello ", req, "!"))
 }

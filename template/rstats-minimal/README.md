@@ -26,7 +26,14 @@ faas-cli new --lang rstats-minimal <function-name> --prefix="<docker-user>"
 ### Customizing your function
 
 - edit `./<function-name>/function/handler.R`
-- add dependencies include system dependencies to `./function/PACKAGES`
+- add system dependencies to `./function/SYSTEMDEPS`
+- add dependencies to `./function/PACKAGES`
+
+installr -t option need to seperate SYSTEMDEPS file using as a openfaas template.
+
+Template is also example with `data.table` and system dependoncy is that `zlib-dev`.
+
+Plaaes add items with enter or space in PACKAGES and SYSTEMDEPS.
 
 Please read [this](https://github.com/r-hub/r-minimal) for dependoncies.
 
@@ -40,8 +47,21 @@ faas-cli up -f <function-name>.yml
 
 ## Testing
 
-Use the UI or curl (should give `["Hello Friend!"]`)
+Use the UI or curl (should give `["Friend"]`)
+
+```r
+library(httr)
+library(jsonlite)
+library(magrittr)
+"http://localhost:8080/function/<function-name>" %>% 
+  POST(body = toJSON("test"), encode = "json") %>% 
+  content()
+  
+"http://localhost:8080/function/<function-name>" %>% 
+  POST(body = list(name = "test"), encode = "json") %>% 
+  content()
+```
 
 ```
-curl http://localhost:8080/function/<function-name> -d '["Friend"]'
+curl http://localhost:8080/function/<function-name> -d '[{"return":"Hello Friend!"}]'
 ```

@@ -12,12 +12,22 @@ WORKDIR /home/app
 
 COPY index.R           .
 COPY PACKAGES          .
-RUN installr -d ""$(tr '\n' '  ' < PACKAGES)""
+COPY SYSTEMDEPS        .
+RUN TEMS=$(cat SYSTEMDEPS | tr '(\r|)\n' ' ') \
+    && apk add $TEMS \
+    && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
+    && apk del $TEMS \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir -p function
 WORKDIR /home/app/function
-COPY function/PACKAGES .
-RUN installr -d ""$(tr '\n' '  ' < PACKAGES)""
+COPY function/PACKAGES          .
+COPY function/SYSTEMDEPS        .
+RUN TEMS=$(cat SYSTEMDEPS | tr '(\r|)\n' ' ') \
+    && apk add $TEMS \
+    && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
+    && apk del $TEMS \
+    && rm -rf /var/cache/apk/*
 
 WORKDIR /home/app
 
