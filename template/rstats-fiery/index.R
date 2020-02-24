@@ -1,20 +1,25 @@
 #!/usr/bin/env Rscript
 
-suppressMessages(library(plumber))
+suppressMessages(library(fiery))
 
 source("function/handler.R")
 
-pr <- plumber$new()
+# Create a New App
+app <- Fire$new(host = '0.0.0.0', port = 5000L)
 
-## note: only pass req or res when used to avoid
-## `simpleError in handle(req, res): unused argument (res)`
-pr$handle("POST", "/", function(req) {
-  tryCatch(handle(req), error = function(e) {
-    res$status <- 400
-    return(list(error = e, traceback = ...))
-  })
+# Handle requests
+app$on('request', function(server, request, ...) {
+  response <- request$respond()
+  response$status <- 200L
+  print(request$body)
+  response$body <- handle(request$body)
+  response$type <- 'text/html'
 })
 
-pr$run(
-  host = "0.0.0.0",
-  port = 5000)
+# Be polite
+app$on('end', function(server) {
+  message('Goodbye')
+  flush.console()
+})
+
+app$ignite()

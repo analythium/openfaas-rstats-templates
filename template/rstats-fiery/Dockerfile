@@ -7,7 +7,7 @@ ARG ADDITIONAL_PACKAGE
 
 RUN apt-get update && apt-get install -y \
     --no-install-recommends ${ADDITIONAL_PACKAGE} \
-    git-core libssl-dev libcurl4-gnutls-dev \
+    git-core libssl-dev libcurl4-gnutls-dev libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN install2.r -e remotes
