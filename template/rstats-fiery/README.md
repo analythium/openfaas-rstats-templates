@@ -1,6 +1,6 @@
-# R/plumber template for OpenFaaS with of-watchdog
+# R/fiery template for OpenFaaS with of-watchdog
 
-> Sends and receives JSON using [{plumber}](https://www.rplumber.io/)
+> Sends and receives JSON using [{fiery}](https://fiery.data-imaginist.com/)
 > and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog).
 
 ### Making a new function
@@ -14,7 +14,7 @@ faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 Create a new function
 
 ```bash
-faas-cli new --lang rstats-http <function-name> --prefix="<docker-user>"
+faas-cli new --lang rstats-fiery <function-name> --prefix="<docker-user>"
 ```
 
 ### Customizing your function
@@ -31,8 +31,8 @@ faas-cli up -f <function-name>.yml
 
 ## Testing
 
-Use the UI or curl (should give `["Hello Friend!"]`)
+Use the UI or curl (should give `{\"return\":[\"Hello Friend!\"]}`)
 
 ```
-curl http://localhost:8080/function/<function-name> -d '["Friend"]'
+curl http://localhost:8080/function/<function-name> -d '["name": "Friend"]'
 ```

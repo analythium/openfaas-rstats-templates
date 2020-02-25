@@ -1,3 +1,3 @@
-handle <- function(req) {
-  paste0("Hello ", req$name, "!")
+handle <- function(body) {
+  list(return=paste0('Hello ', body$name, '!'))
 }
