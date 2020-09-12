@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 FILE <- commandArgs(trailingOnly = TRUE)[1L]
-#' Install R package dependencies found in requirements.txt
+#' Install R package dependencies found in PACKAGES
 #'
 #' set remote to RStudio server
 repos <- "https://cran.rstudio.com/"
@@ -9,9 +9,9 @@ repos <- "https://cran.rstudio.com/"
 upgrade <- "never"
 #' load remotes package
 library(remotes)
-#' function to read in requirements.txt
+#' function to read in PACKAGES
 #' each dependency is on a new line (no separators)
-#' remotes in requirements.txt defined according to:
+#' remotes in PACKAGES defined according to:
 #' https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html
 read_requirements <- function(file) {
   x <- readLines(file)
