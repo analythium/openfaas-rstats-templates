@@ -42,8 +42,11 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-## R related files
+# R related files
 *.Rdata
 *.Rhistory
 .Rproj.user*
 .Rproj.user
+
+# Exclude tmp folder
+tmp/

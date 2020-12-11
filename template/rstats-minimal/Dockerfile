@@ -12,8 +12,8 @@ WORKDIR /home/app
 
 COPY index.R           .
 COPY PACKAGES          .
-COPY SYSTEMDEPS        .
-RUN TEMS=$(cat SYSTEMDEPS | tr '(\r|)\n' ' ') \
+COPY SYSREQS           .
+RUN TEMS=$(cat SYSREQS | tr '(\r|)\n' ' ') \
     && apk add $TEMS \
     && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
     && apk del $TEMS \
@@ -22,8 +22,8 @@ RUN TEMS=$(cat SYSTEMDEPS | tr '(\r|)\n' ' ') \
 RUN mkdir -p function
 WORKDIR /home/app/function
 COPY function/PACKAGES          .
-COPY function/SYSTEMDEPS        .
-RUN TEMS=$(cat SYSTEMDEPS | tr '(\r|)\n' ' ') \
+COPY function/SYSREQS           .
+RUN TEMS=$(cat SYSREQS | tr '(\r|)\n' ' ') \
     && apk add $TEMS \
     && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
     && apk del $TEMS \
