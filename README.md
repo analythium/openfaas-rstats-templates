@@ -3,11 +3,12 @@
 > This project provides [OpenFaaS](https://www.openfaas.com/)
 > templates for the [R](https://www.r-project.org/) language.
 
-* [Introduction](#introduction)
-* [Usage](#usage)
-  - [Setup](#setup)
-  - [Make a new function](#make-a-new-function)
-  - [Customize your function](#customize-your-function)
+- [R (rstats) templates for OpenFaaS](#r-rstats-templates-for-openfaas)
+  - [Introduction](#introduction)
+  - [Usage](#usage)
+    - [Setup](#setup)
+    - [Make a new function](#make-a-new-function)
+    - [Customize your function](#customize-your-function)
 
 ## Introduction
 
