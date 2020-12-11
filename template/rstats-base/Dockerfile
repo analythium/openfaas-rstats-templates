@@ -1,4 +1,4 @@
-FROM openfaas/classic-watchdog:0.18.10 as watchdog
+FROM openfaas/classic-watchdog:0.20.1 as watchdog
 FROM rocker/r-base:latest
 
 # Allows you to add additional system dependencies

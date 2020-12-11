@@ -1,4 +1,4 @@
-FROM openfaas/of-watchdog:0.7.6 as watchdog
+FROM openfaas/of-watchdog:0.8.1 as watchdog
 
 FROM rocker/r-base:latest
 
