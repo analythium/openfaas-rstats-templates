@@ -63,8 +63,6 @@ install <- local({
   ## local is path to local directory,
   ## or compressed file (tar, zip, tar.gz tar.bz2, tgz2 or tbz)
   list(
-    dependencies = remotes::install_deps,
-    local = remotes::install_local,
     versioned = versioned,
     sysreqs = sysreqs
   )

@@ -4,6 +4,14 @@ FROM rocker/r-base:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
+# Note: remotes is already installed in rocker?
+#RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org")))' > /usr/lib/R/etc/Rprofile.site
+#RUN echo 'local(options(repos = c(CRAN = "https://cran.rstudio.org")))' > /usr/lib/R/etc/Rprofile.site
+#RUN echo 'local(options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest")))' > /usr/lib/R/etc/Rprofile.site
+#RUN install.r remotes
+ENV _R_SHLIB_STRIP_=true
+RUN R -q -e 'install.packages("remotes")'
+
 # Create a non-root user
 RUN addgroup --system app \
     && adduser --system --ingroup app app
@@ -16,23 +24,20 @@ COPY index.R           .
 COPY DESCRIPTION       .
 COPY function          .
 
-# Note: remotes is already installed in rocker
-ENV _R_SHLIB_STRIP_=true
-ENV R_REMOTES_UPGRADE=false
-#RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org")))' > /usr/lib/R/etc/Rprofile.site
-#RUN echo 'local(options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest")))' > /usr/lib/R/etc/Rprofile.site
 
 ## Istall SystemRequirements from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs(file="tmpfile")'
-RUN LIBS=$(cat tmpfile)
-RUN rm tmpfile
+#RUN LIBS=$(cat tmpfile)
+RUN cat tmpfile
+#RUN rm tmpfile
 
-RUN apt-get update && apt-get install -y \
-    --no-install-recommends ${LIBS} \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN xargs -a tmpfile apt-get install -y --no-install-recommends
+RUN rm -rf /var/lib/apt/lists/*
 
 ## Install package dependencies (incl. remotes) from DESCRIPTION
-RUN R -q -e 'source("/usr/local/bin/install.R"); install$dependencies()'
+#RUN installDeps.r
+RUN R -q -e 'remotes::install_deps()'
 
 ## Install VersionedPackages from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'

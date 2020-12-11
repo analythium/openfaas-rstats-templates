@@ -22,6 +22,22 @@ The `Dockerfile` install script handles dependencies as specified in the
 - `SystemRequirements:` are saved and installed
 - `VersionedPackages:` field can be used to pin package versions using `remotes::install_version()`
 
+For example:
+
+```bash
+Package: OpenFaaS
+Version: 0.0.1
+Imports:
+  jsonlite
+Remotes: psolymos/pbapply
+SystemRequirements:
+  git-core,
+  libssl-dev,
+  libcurl4-gnutls-dev
+VersionedPackages:
+  devtools (>= 1.12.0, < 1.14)
+```
+
 You might also have to meddle with the `Dockerfile` if specific
 R version or further customization is needed.
 The templates are using the following base images:
