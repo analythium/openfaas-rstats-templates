@@ -1,0 +1,6 @@
+Package: OpenFaaS
+Version: 0.0.1
+Imports:
+  jsonlite
+Remotes:
+SystemRequirements:
