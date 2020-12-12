@@ -37,7 +37,7 @@ RUN rm -rf /var/cache/apk/*
 RUN rm requirements.txt
 
 # Install packages (incl. remotes) for handler.R from DESCRIPTION
-RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
+RUN R -q -e 'remotes::install_deps()'
 
 # Install VersionedPackages for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'

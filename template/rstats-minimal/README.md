@@ -101,3 +101,44 @@ Replace `localhost` with IP address if testing on remote location:
 curl http://localhost:8080/function/<function-name> -d '["Friend"]'
 # ["Hello Friend!"]
 ```
+
+## Example: PCA
+
+Create a new function:
+```bash
+faas-cli new --lang rstats-minimal r-minimal-pca --prefix=dockeruser
+```
+
+Change `handler.R`:
+
+```R
+suppressMessages(library(vegan))
+handle <- function(req) {
+    scores(rda(req), 1:2)$sites
+}
+```
+
+Edit `DESCRIPTION`:
+
+```yaml
+Package: OpenFaaStR
+Version: 0.0.1
+Imports:
+  vegan
+Remotes:
+SystemRequirements:
+  gcc,
+  musl-dev,
+  gfortran
+VersionedPackages:
+```
+
+Build the image: `faas-cli build -f r-minimal-pca.yml` and
+test with `docker run -p 4000:8080 dockeruser/r-minimal-pca` and
+
+```bash
+curl http://localhost:4000/ -H \
+  "Content-Type: application/json" -d \
+  '[[-1,3,16],[10,-10,9],[-5,10,-14],[14,3,-12]]'
+# [[2.9545,3.042],[2.7754,-2.5023],[-3.4647,2.7223],[-2.2652,-3.262]]
+```
