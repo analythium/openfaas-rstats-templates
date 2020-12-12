@@ -1,27 +1,19 @@
 ## Usage: move it inside /usr/local/bin
 ## default uses the DESCRIPTION file from the current directory
 
-## Install dependencies:
-## R -q -e 'source("/usr/local/bin/install.R"); install$dependencies()'
-
-## Install from local folder:
-##   local is path to local directory,
-##   or compressed file (tar, zip, tar.gz tar.bz2, tgz2 or tbz)
-## R -q -e 'source("/usr/local/bin/install.R"); install$local()'
-
 ## Install versioned packages: uses VersionedPackages field in DESCRIPTION
 ## VersionedPackages: devtools (1.11.0), mypackage (>= 1.12.0, < 1.14)
 ## R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 
 ## List libraries listed in the SystemRequirements field of DESCRIPTION
-## by default concatenated and saved into tmpfile
+## concatenated and saved into requirements.txt
 ## R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
-## LIBS=$(cat tmpfile); rm tmpfile
+## LIBS=$(cat requirements.txt); rm requirements.txt
 
 install <- local({
 
-  ## list SystemRequirements as a vector or separated by space
-  sysreqs <- function(pkgdir = ".", file="tmpfile") {
+  ## list SystemRequirements separated by space
+  sysreqs <- function(pkgdir = ".", file="requirements.txt") {
     descr <- as.list(as.data.frame(read.dcf(paste0(pkgdir, "/DESCRIPTION"))))
     if (!is.null(descr$SystemRequirements)) {
       out <- trimws(strsplit(descr$SystemRequirements, ",")[[1]])
@@ -32,8 +24,8 @@ install <- local({
     writeLines(out, paste0(pkgdir, "/", file))
   }
 
-  ## install versioned packages listed in the VersionedPackages
-  ## 
+  ## install versioned packages listed in VersionedPackages
+  ## ... passes args to remotes::install_version
   versioned <- function(pkgdir = ".", ...) {
     descr <- as.list(as.data.frame(read.dcf(paste0(pkgdir, "/DESCRIPTION"))))
     if (!is.null(descr$VersionedPackages)) {
@@ -60,8 +52,6 @@ install <- local({
     invisible(NULL)
   }
 
-  ## local is path to local directory,
-  ## or compressed file (tar, zip, tar.gz tar.bz2, tgz2 or tbz)
   list(
     versioned = versioned,
     sysreqs = sysreqs

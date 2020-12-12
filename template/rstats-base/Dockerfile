@@ -4,47 +4,49 @@ FROM rocker/r-base:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Note: remotes is already installed in rocker?
-#RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org")))' > /usr/lib/R/etc/Rprofile.site
-#RUN echo 'local(options(repos = c(CRAN = "https://cran.rstudio.org")))' > /usr/lib/R/etc/Rprofile.site
+# Change repos as needed
+RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/lib/R/etc/Rprofile.site
+#RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/lib/R/etc/Rprofile.site
 #RUN echo 'local(options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest")))' > /usr/lib/R/etc/Rprofile.site
-#RUN install.r remotes
+
+# Install basic dependencies for index.R
 ENV _R_SHLIB_STRIP_=true
-RUN R -q -e 'install.packages("remotes")'
+RUN R -q -e 'install.packages(c("remotes", "jsonlite"))'
+
+COPY install.R /usr/local/bin/
+# Install system requirements for index.R as needed
+#RUN apt-get update \
+#  apt-get install -y \
+#  --no-install-recommends\
+#  ADDITIONAL_PACKAGES \
+#  rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
 RUN addgroup --system app \
     && adduser --system --ingroup app app
 
-COPY install.R /usr/local/bin/
-
 WORKDIR /home/app
 
 COPY index.R           .
-COPY DESCRIPTION       .
 COPY function          .
+RUN ls -la
 
-
-## Istall SystemRequirements from DESCRIPTION
-RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs(file="tmpfile")'
-#RUN LIBS=$(cat tmpfile)
-RUN cat tmpfile
-#RUN rm tmpfile
-
+# Istall SystemRequirements for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
+RUN echo requirements.txt
 RUN apt-get update
-RUN xargs -a tmpfile apt-get install -y --no-install-recommends
+RUN xargs -a requirements.txt apt-get install -y --no-install-recommends
 RUN rm -rf /var/lib/apt/lists/*
+RUN rm requirements.txt
 
-## Install package dependencies (incl. remotes) from DESCRIPTION
-#RUN installDeps.r
+# Install packages (incl. remotes) for handler.R from DESCRIPTION
 RUN R -q -e 'remotes::install_deps()'
 
-## Install VersionedPackages from DESCRIPTION
+## Install VersionedPackages for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 
 ## Switch to app user
 RUN chown app:app -R /home/app
-
 USER app
 
 ENV fprocess="Rscript index.R"

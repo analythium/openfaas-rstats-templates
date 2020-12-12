@@ -4,7 +4,7 @@
 suppressMessages(library(jsonlite))
 
 # source handler.R script
-source("function/handler.R")
+source("handler.R")
 
 # read stdin as input
 f <- file("stdin")
