@@ -4,8 +4,9 @@ FROM rocker/r-ubuntu:18.04
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Change repos as needed
-RUN echo 'local(options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest")))' > /usr/local/lib/R/etc/Rprofile.site
+# Change options as needed in Rprofile.site
+COPY Rprofile.site /etc/R
+RUN R -q -e 'print(getOption("repos"))'
 
 # Install basic dependencies for index.R
 ENV _R_SHLIB_STRIP_=true
