@@ -4,6 +4,21 @@ FROM rhub/r-minimal:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
+# Change repos as needed
+RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/local/lib/R/etc/Rprofile.site
+
+# Install basic dependencies for index.R
+ENV _R_SHLIB_STRIP_=true
+RUN installr -d remotes jsonlite
+
+COPY install.R /usr/local/bin/
+# Install system requirements for index.R as needed
+#ENV LIBS=''
+#RUN apk update
+#RUN apk add ${LIBS}
+#RUN rm -rf /var/cache/apk/*
+
+
 # Create a non-root user
 RUN addgroup --system app \
     && adduser --system --ingroup app app
@@ -11,30 +26,28 @@ RUN addgroup --system app \
 WORKDIR /home/app
 
 COPY index.R           .
-COPY PACKAGES          .
-COPY SYSREQS           .
-RUN TEMS=$(cat SYSREQS | tr '(\r|)\n' ' ') \
-    && apk add $TEMS \
-    && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
-    && apk del $TEMS \
-    && rm -rf /var/cache/apk/*
+COPY function          .
 
-RUN mkdir -p function
-WORKDIR /home/app/function
-COPY function/PACKAGES          .
-COPY function/SYSREQS           .
-RUN TEMS=$(cat SYSREQS | tr '(\r|)\n' ' ') \
-    && apk add $TEMS \
-    && installr -d ""$(tr '(\r|)\n' ' ' < PACKAGES)"" \
-    && apk del $TEMS \
-    && rm -rf /var/cache/apk/*
+# Istall SystemRequirements for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
+RUN echo requirements.txt
+RUN apk update
+RUN xargs -a requirements.txt apk add
+RUN rm -rf /var/cache/apk/*
+RUN rm requirements.txt
 
-WORKDIR /home/app
+# Install packages (incl. remotes) for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
 
-COPY function           function
+# Install VersionedPackages for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 
+# Cleanup
+RUN R -q -e 'remove.packages("remotes")'
+RUN rm /usr/local/bin/install.R
+
+# Switch to app user
 RUN chown app:app -R /home/app
-
 USER app
 
 ENV fprocess="R --slave -f index.R"

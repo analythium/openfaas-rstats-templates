@@ -1,4 +1,7 @@
+#!/usr/bin/env Rscript
+
+## req is the input parsed from stdin
+## return value must be coercible to JSON
 handle <- function(req) {
-  # req is named list from requests convert using jsonlite::fromJSON
-  data.table::data.table(return = paste0("Hello ", req, "!"))
+    paste0("Hello ", req, "!")
 }

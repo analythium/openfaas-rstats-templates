@@ -1,13 +1,11 @@
 language: rstats
-fprocess: Rscript index.R
+fprocess: R --slave -f index.R
 welcome_message: |
   You have created a new function which uses R and the Classic
   OpenFaaS template.
 
-  To include third-party dependencies, add packages to the PACKAGES
-  file, one package per line (packagename or packagename@version) 
-  which can be a remote, see
-  https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html
+  To include third-party dependencies, add packages, remotes,
+  and system dependencies to the DESCRIPTION file.
 
-  For high-throughput applications, we recommend using the rstats-http
-  template instead available via the store.
+  For high-throughput applications, we recommend using the
+  HTTP-based rstats templates available via the store.

@@ -1,17 +1,21 @@
 #!/usr/bin/env Rscript
 
+# load jsonlite
 suppressMessages(library(jsonlite))
 
-source("function/handler.R")
+# source handler.R script
+source("handler.R")
 
+# read stdin as input
 f <- file("stdin")
 open(f)
-input <- readLines(f, warn = FALSE, n = -1)
+input <- fromJSON(
+    readLines(f, warn = FALSE, n = 1) # 1st line only
+)
+close(f)
 
-input <- jsonlite::fromJSON(input)
-
-output <- handle(input)
-
-output <- jsonlite::toJSON(output, auto_unbox = T)
-
+# write output to stdout
+output <- toJSON(
+    handle(input)
+)
 write(output, stdout())
