@@ -15,11 +15,10 @@ RUN R -q -e 'install.packages(c("remotes", "jsonlite"))'
 
 COPY install.R /usr/local/bin/
 # Install system requirements for index.R as needed
-#RUN apt-get update \
-#  apt-get install -y \
-#  --no-install-recommends\
-#  ADDITIONAL_PACKAGES \
-#  rm -rf /var/lib/apt/lists/*
+#ENV LIBS=''
+#RUN apt-get update && apt-get install -y \
+#    --no-install-recommends ${LIBS} \
+#    && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
 RUN addgroup --system app \
@@ -29,7 +28,6 @@ WORKDIR /home/app
 
 COPY index.R           .
 COPY function          .
-RUN ls -la
 
 # Istall SystemRequirements for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
