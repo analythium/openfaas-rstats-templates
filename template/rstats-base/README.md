@@ -3,6 +3,8 @@
 > Sends and receives JSON using
 > [classic watchdog](https://github.com/openfaas/classic-watchdog).
 
+This template uses the rocker/r-base:latest image.
+
 ## Making a new function
 
 Use the `faas-cli` and pull R templates

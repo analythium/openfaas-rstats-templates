@@ -5,9 +5,7 @@ COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
 # Change repos as needed
-RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/lib/R/etc/Rprofile.site
-#RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/lib/R/etc/Rprofile.site
-#RUN echo 'local(options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest")))' > /usr/lib/R/etc/Rprofile.site
+RUN echo 'local(options(repos = c(CRAN = "https://cloud.r-project.org/")))' > /usr/local/lib/R/etc/Rprofile.site
 
 # Install basic dependencies for index.R
 ENV _R_SHLIB_STRIP_=true
@@ -40,10 +38,10 @@ RUN rm requirements.txt
 # Install packages (incl. remotes) for handler.R from DESCRIPTION
 RUN R -q -e 'remotes::install_deps()'
 
-## Install VersionedPackages for handler.R from DESCRIPTION
+# Install VersionedPackages for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 
-## Switch to app user
+# Switch to app user
 RUN chown app:app -R /home/app
 USER app
 
