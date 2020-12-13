@@ -1,5 +1,5 @@
-language: rstats-minimal
-fprocess: R --slave -f index.R
+language: rstats-base
+fprocess: Rscript index.R
 welcome_message: |
   You have created a new function which uses R and the Classic
   OpenFaaS template.

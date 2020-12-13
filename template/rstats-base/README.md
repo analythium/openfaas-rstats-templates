@@ -1,9 +1,9 @@
-# R template for OpenFaaS with classic watchdog based on rhub/r-minimal
+# R template for OpenFaaS with classic watchdog based on rocker/r-base
 
 > Sends and receives JSON using
 > [classic watchdog](https://github.com/openfaas/classic-watchdog).
 
-This template uses the rhub/r-minimal:latest image.
+This template uses the rocker/r-base:latest image.
 
 ## Making a new function
 
@@ -13,20 +13,20 @@ Use the `faas-cli` and pull R templates
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 ```
 
-Use the `rstats-minimal` function template and
-create a new function called `r-minimal-hello`; prefix the `dockeruser` to the
-docker image tag (i.e. `dockeruser/r-minimal-hello` will be the image name):
+Use the `rstats-base` function template and
+create a new function called `r-base-hello`; prefix the `dockeruser` to the
+docker image tag (i.e. `dockeruser/r-base-hello` will be the image name):
 
 ```bash
-faas-cli new --lang rstats-minimal r-minimal-hello --prefix=dockeruser
+faas-cli new --lang rstats-base r-base-hello --prefix=dockeruser
 ```
 
 ## Customizing your function
 
-Now we have a `r-minimal-hello.yml` file and function folder `./r-minimal-hello`.
+Now we have a `r-base-hello.yml` file and function folder `./r-base-hello`.
 Files in the function folder will get copied to the `/home/app` directory of the image.
 Read more about the [YAML configuration](https://docs.openfaas.com/reference/yaml/).
-Customize the `./r-minimal-hello/handler.R` file as needed:
+Customize the `./r-base-hello/handler.R` file as needed:
 
 - load required packages using `library()`,
 - put your data in the folder and load it relative to the function folder (e.g. `data.RData`) or use the full path (e.g. `/home/app/data.csv`),
@@ -40,30 +40,29 @@ The `up` command includes `build` (build an image into the local Docker library)
 and `deploy` (deploy your function into a cluster):
 
 ```bash
-faas-cli up -f r-minimal-hello.yml
+faas-cli up -f r-base-hello.yml
 ```
 
 Now you should see something like this:
 
 ```bash
-[0] > Building r-minimal-hello.
+[0] > Building r-base-hello.
 ...
-[0] < Building r-minimal-hello done in 10.97s.
+[0] < Building r-base-hello done in 10.97s.
 [0] Worker done.
 
 Total build time: 0.97s
 
-[0] > Pushing r-minimal-hello [dockeruser/r-minimal-hello:latest].
+[0] > Pushing r-base-hello [dockeruser/r-base-hello:latest].
 ...
-[0] < Pushing r-minimal-hello [dockeruser/r-minimal-hello:latest] done.
+[0] < Pushing r-base-hello [dockeruser/r-base-hello:latest] done.
 [0] Worker done.
 
-Deploying: r-minimal-hello.
+Deploying: r-base-hello.
 WARNING! Communication is not secure, please consider using HTTPS. Letsencrypt.org offers free SSL/TLS certificates.
 
 Deployed. 202 Accepted.
-URL: http://IP_ADDRESS:8080/function/r-minimal-hello.openfaas-fn
-
+URL: http://IP_ADDRESS:8080/function/r-base-hello.openfaas-fn
 ```
 
 ## Testing
@@ -71,7 +70,7 @@ URL: http://IP_ADDRESS:8080/function/r-minimal-hello.openfaas-fn
 Test the local Docker image forwarding to port 4000
 
 ```bash
-docker run -p 4000:8080 dockeruser/r-minimal-hello
+docker run -p 4000:8080 dockeruser/r-base-hello
 ```
 
 Curl should return `["Hello Friend!"]`:
@@ -106,7 +105,7 @@ curl http://localhost:8080/function/<function-name> -d '["Friend"]'
 
 Create a new function:
 ```bash
-faas-cli new --lang rstats-minimal r-minimal-pca --prefix=dockeruser
+faas-cli new --lang rstats-base r-base-pca --prefix=dockeruser
 ```
 
 Change `handler.R`:
@@ -127,14 +126,11 @@ Imports:
   vegan
 Remotes:
 SystemRequirements:
-  gcc,
-  musl-dev,
-  gfortran
 VersionedPackages:
 ```
 
-Build the image: `faas-cli build -f r-minimal-pca.yml` and
-test with `docker run -p 4000:8080 dockeruser/r-minimal-pca` and
+Build the image: `faas-cli build -f r-base-pca.yml` and
+test with `docker run -p 4000:8080 dockeruser/r-base-pca` and
 
 ```bash
 curl http://localhost:4000/ -H \

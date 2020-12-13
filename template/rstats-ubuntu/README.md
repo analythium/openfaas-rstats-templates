@@ -1,9 +1,10 @@
-# R template for OpenFaaS with classic watchdog based on rhub/r-minimal
+# R template for OpenFaaS with classic watchdog based on rocker/r-ubuntu
 
 > Sends and receives JSON using
 > [classic watchdog](https://github.com/openfaas/classic-watchdog).
 
-This template uses the rhub/r-minimal:latest image.
+This template uses the rocker/r-ubuntu:18.04 image and
+the repos option to Ubuntu bionic via [RSPM](https://packagemanager.rstudio.com).
 
 ## Making a new function
 
@@ -13,20 +14,20 @@ Use the `faas-cli` and pull R templates
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 ```
 
-Use the `rstats-minimal` function template and
-create a new function called `r-minimal-hello`; prefix the `dockeruser` to the
-docker image tag (i.e. `dockeruser/r-minimal-hello` will be the image name):
+Use the `rstats-ubuntu` function template and
+create a new function called `r-ubuntu-hello`; prefix the `dockeruser` to the
+docker image tag (i.e. `dockeruser/r-ubuntu-hello` will be the image name):
 
 ```bash
-faas-cli new --lang rstats-minimal r-minimal-hello --prefix=dockeruser
+faas-cli new --lang rstats-ubuntu r-ubuntu-hello --prefix=dockeruser
 ```
 
 ## Customizing your function
 
-Now we have a `r-minimal-hello.yml` file and function folder `./r-minimal-hello`.
+Now we have a `r-ubuntu-hello.yml` file and function folder `./r-ubuntu-hello`.
 Files in the function folder will get copied to the `/home/app` directory of the image.
 Read more about the [YAML configuration](https://docs.openfaas.com/reference/yaml/).
-Customize the `./r-minimal-hello/handler.R` file as needed:
+Customize the `./r-ubuntu-hello/handler.R` file as needed:
 
 - load required packages using `library()`,
 - put your data in the folder and load it relative to the function folder (e.g. `data.RData`) or use the full path (e.g. `/home/app/data.csv`),
@@ -40,29 +41,29 @@ The `up` command includes `build` (build an image into the local Docker library)
 and `deploy` (deploy your function into a cluster):
 
 ```bash
-faas-cli up -f r-minimal-hello.yml
+faas-cli up -f r-ubuntu-hello.yml
 ```
 
 Now you should see something like this:
 
 ```bash
-[0] > Building r-minimal-hello.
+[0] > Building r-ubuntu-hello.
 ...
-[0] < Building r-minimal-hello done in 10.97s.
+[0] < Building r-ubuntu-hello done in 10.97s.
 [0] Worker done.
 
 Total build time: 0.97s
 
-[0] > Pushing r-minimal-hello [dockeruser/r-minimal-hello:latest].
+[0] > Pushing r-ubuntu-hello [dockeruser/r-ubuntu-hello:latest].
 ...
-[0] < Pushing r-minimal-hello [dockeruser/r-minimal-hello:latest] done.
+[0] < Pushing r-ubuntu-hello [dockeruser/r-ubuntu-hello:latest] done.
 [0] Worker done.
 
-Deploying: r-minimal-hello.
+Deploying: r-ubuntu-hello.
 WARNING! Communication is not secure, please consider using HTTPS. Letsencrypt.org offers free SSL/TLS certificates.
 
 Deployed. 202 Accepted.
-URL: http://IP_ADDRESS:8080/function/r-minimal-hello.openfaas-fn
+URL: http://IP_ADDRESS:8080/function/r-ubuntu-hello.openfaas-fn
 
 ```
 
@@ -71,7 +72,7 @@ URL: http://IP_ADDRESS:8080/function/r-minimal-hello.openfaas-fn
 Test the local Docker image forwarding to port 4000
 
 ```bash
-docker run -p 4000:8080 dockeruser/r-minimal-hello
+docker run -p 4000:8080 dockeruser/r-ubuntu-hello
 ```
 
 Curl should return `["Hello Friend!"]`:
@@ -106,7 +107,7 @@ curl http://localhost:8080/function/<function-name> -d '["Friend"]'
 
 Create a new function:
 ```bash
-faas-cli new --lang rstats-minimal r-minimal-pca --prefix=dockeruser
+faas-cli new --lang rstats-ubuntu r-ubuntu-pca --prefix=dockeruser
 ```
 
 Change `handler.R`:
@@ -126,15 +127,20 @@ Version: 0.0.1
 Imports:
   vegan
 Remotes:
+  vegandevs/vegan
 SystemRequirements:
-  gcc,
-  musl-dev,
-  gfortran
+  libgfortran3,
+  libgfortran5
 VersionedPackages:
 ```
 
-Build the image: `faas-cli build -f r-minimal-pca.yml` and
-test with `docker run -p 4000:8080 dockeruser/r-minimal-pca` and
+Note: need to build vegan from source otherwise it cannot link to shared libraries.
+Therefore we add it to Remotes (we have to list it under Imports, but
+Remotes indicates that it is to be installed from GitHub and not from the RSPM
+CRAN repo).
+
+Build the image: `faas-cli build -f r-ubuntu-pca.yml` and
+test with `docker run -p 4000:8080 dockeruser/r-ubuntu-pca` and
 
 ```bash
 curl http://localhost:4000/ -H \
