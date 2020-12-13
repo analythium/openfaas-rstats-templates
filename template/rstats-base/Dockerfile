@@ -4,19 +4,20 @@ FROM rocker/r-base:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Change options as needed in Rprofile.site
-COPY Rprofile.site /etc/R
-
-# Install basic dependencies for index.R
-ENV _R_SHLIB_STRIP_=true
-RUN R -q -e 'install.packages(c("remotes", "jsonlite"))'
-
-COPY install.R /usr/local/bin/
 # Install system requirements for index.R as needed
 #ENV LIBS=''
 #RUN apt-get update && apt-get install -y \
 #    --no-install-recommends ${LIBS} \
 #    && rm -rf /var/lib/apt/lists/*
+
+# Change options as needed in Rprofile.site
+COPY Rprofile.site /etc/R
+ENV _R_SHLIB_STRIP_=true
+
+# Install basic dependencies for index.R
+RUN R -q -e 'install.packages(c("remotes", "jsonlite"))'
+
+COPY install.R /usr/local/bin/
 
 # Create a non-root user
 RUN addgroup --system app \

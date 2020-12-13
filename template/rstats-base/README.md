@@ -63,7 +63,6 @@ WARNING! Communication is not secure, please consider using HTTPS. Letsencrypt.o
 
 Deployed. 202 Accepted.
 URL: http://IP_ADDRESS:8080/function/r-base-hello.openfaas-fn
-
 ```
 
 ## Testing

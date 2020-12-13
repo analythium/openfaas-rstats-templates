@@ -1,19 +1,29 @@
 FROM openfaas/of-watchdog:0.8.1 as watchdog
-
 FROM rocker/r-base:latest
-
-# Allows you to add additional system dependencies
-ARG ADDITIONAL_PACKAGE
-
-RUN apt-get update && apt-get install -y \
-    --no-install-recommends ${ADDITIONAL_PACKAGE} \
-    git-core libssl-dev libcurl4-gnutls-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN install2.r -e remotes
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
+
+# Install system requirements for index.R as needed
+RUN apt-get update && apt-get install -y \
+    --no-install-recommends \
+    git-core \
+    libssl-dev \
+    libcurl4-gnutls-dev \
+    curl \
+    libsodium-dev \
+    libxml2-dev \
+    libicu-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Change options as needed in Rprofile.site
+COPY Rprofile.site /etc/R
+ENV _R_SHLIB_STRIP_=true
+
+# Install basic dependencies for index.R
+RUN install2.r -e remotes plumber
+
+COPY install.R /usr/local/bin/
 
 # Create a non-root user
 RUN addgroup --system app \
@@ -22,24 +32,24 @@ RUN addgroup --system app \
 WORKDIR /home/app
 
 COPY index.R           .
-COPY PACKAGES          .
-COPY install.R         .
-RUN Rscript --vanilla install.R PACKAGES
-RUN rm -f install.R
+COPY function          .
 
-RUN mkdir -p function
-WORKDIR /home/app/function
-COPY function/PACKAGES .
-COPY install.R         .
-RUN Rscript --vanilla install.R PACKAGES
-RUN rm -f install.R
+# Istall SystemRequirements for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
+RUN echo requirements.txt
+RUN apt-get update
+RUN xargs -a requirements.txt apt-get install -y --no-install-recommends
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm requirements.txt
 
-WORKDIR /home/app
+# Install packages (incl. remotes) for handler.R from DESCRIPTION
+RUN R -q -e 'remotes::install_deps()'
 
-COPY function           function
+# Install VersionedPackages for handler.R from DESCRIPTION
+RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 
+# Switch to app user
 RUN chown app:app -R /home/app
-
 USER app
 
 ENV fprocess="Rscript index.R"

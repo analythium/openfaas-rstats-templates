@@ -4,19 +4,20 @@ FROM rhub/r-minimal:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Change options as needed in Rprofile.site
-COPY Rprofile.site /usr/local/lib/R/etc/Rprofile.site
-
-# Install basic dependencies for index.R
-ENV _R_SHLIB_STRIP_=true
-RUN installr -d remotes jsonlite
-
-COPY install.R /usr/local/bin/
 # Install system requirements for index.R as needed
 #ENV LIBS=''
 #RUN apk update
 #RUN apk add ${LIBS}
 #RUN rm -rf /var/cache/apk/*
+
+# Change options as needed in Rprofile.site
+COPY Rprofile.site /usr/local/lib/R/etc/Rprofile.site
+ENV _R_SHLIB_STRIP_=true
+
+# Install basic dependencies for index.R
+RUN installr -d remotes jsonlite
+
+COPY install.R /usr/local/bin/
 
 # Create a non-root user
 RUN addgroup --system app \
