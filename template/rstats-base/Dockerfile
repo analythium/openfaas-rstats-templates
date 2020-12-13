@@ -6,7 +6,6 @@ RUN chmod +x /usr/bin/fwatchdog
 
 # Change options as needed in Rprofile.site
 COPY Rprofile.site /etc/R
-RUN R -q -e 'print(getOption("repos"))'
 
 # Install basic dependencies for index.R
 ENV _R_SHLIB_STRIP_=true
