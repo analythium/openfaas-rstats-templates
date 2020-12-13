@@ -1,4 +1,4 @@
-language: rstats
+language: rstats-minimal
 fprocess: R --slave -f index.R
 welcome_message: |
   You have created a new function which uses R and the Classic

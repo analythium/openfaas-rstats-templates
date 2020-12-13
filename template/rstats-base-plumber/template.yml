@@ -1,10 +1,7 @@
-language: rstats-http
+language: rstats-base-plumber
 fprocess: Rscript index.R
 welcome_message: |
   You have created a new function which uses R and the OpenFaaS 
   of-watchdog.
 
-  To include third-party dependencies, add packages to the PACKAGES
-  file, one package per line (packagename or packagename@version) 
-  which can be a remote, see
-  https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html
+  Include third-party dependencies in the DESCRIPTION file.
