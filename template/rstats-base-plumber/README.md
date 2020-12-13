@@ -1,6 +1,6 @@
 # R/plumber template for OpenFaaS with of-watchdog
 
-> Sends and receives JSON using [{plumber}](https://www.rplumber.io/)
+> Sends and receives JSON using [plumber](https://www.rplumber.io/)
 > and [of-watchdog](https://github.com/openfaas/of-watchdog).
 
 This template uses the rocker/r-base:latest image.
