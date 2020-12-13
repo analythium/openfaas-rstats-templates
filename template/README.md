@@ -28,17 +28,23 @@ The templates follow similar structure:
 - `./install.R`: utility function used to handle dependencies in the Dockerfile,
 - `./template.yml`: this file specifies the language for the template and the init process for your container.
 
+The files the users are supposed to edit are inside the function folder,
+users might put other files here that will be copied into the `/home/app`
+folder of the Docker image. The handler file contains a function called
+`handler` that the `index.R` entry point calls. See the template readme file
+for specific instructions.
+
 ## Dependencies
 
 The `Dockerfile` install script handles dependencies as specified in the
-`DESCRIPTION` file:
+`DESCRIPTION` file in this order:
 
-- CRAN packages listed in `Depends:`, `Imports:`, `LinkingTo:` fields are installed by `remotes::install_deps()`,
-- `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
-- `SystemRequirements:` list OS specific sysreqs here, comma separated, these are then installed by the OS's package manager,
-- `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and commas inside parenthesis are important).
+1. `SystemRequirements:` list OS specific sysreqs here, comma separated, these are then installed by the OS's package manager,
+2. CRAN packages listed in `Depends:`, `Imports:`, `LinkingTo:` fields are installed by `remotes::install_deps()`,
+3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
+4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and commas inside parenthesis are important).
 
-For example:
+For example `DESCRIPTION` file:
 
 ```yaml
 Package: OpenFaaS

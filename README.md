@@ -32,11 +32,13 @@ or caching). This is what the `rstats-http` template is using.
 
 ### Setup
 
-It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first and set up
-Kubernetes or Docker Swarm and deploy OpenFaaS
-(see docs [here](https://docs.openfaas.com/deployment/)).
-Follow the official OpenFaaS workshop [here](https://docs.openfaas.com/tutorials/workshop/)
-to get going quickly.
+It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first 
+and set up a local or remote Kubernetes or Docker Swarm installation with
+OpenFaaS deployed to the cluster (see docs [here](https://docs.openfaas.com/deployment/)).
+To get going quickly,
+follow the official OpenFaaS [workshop](https://docs.openfaas.com/tutorials/workshop/),
+or enroll into the free
+[Introduction to Serverless on Kubernetes](https://www.edx.org/course/introduction-to-serverless-on-kubernetes) course.
 
 ### Make a new function
 
@@ -46,28 +48,27 @@ Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 ```
 
-Now `faas-cli new --list` should give you a list with `rstats` and `rstats-http` among
-the templates.
+Now `faas-cli new --list` should give you a list with the available `rstats` templates.
 
-Let's create a new function called `hello-rstats`:
+Create a new function called `hello-rstats`:
 
 ```bash
-faas-cli new --lang rstats-http hello-rstats --prefix="<docker-user>"
+faas-cli new --lang rstats-http hello-rstats --prefix=dockeruser
 ```
 
-the `<docker-user>` means a user or organization on e.g. Docker Hub where
+the `dockeruser` means a user or organization on e.g. Docker Hub where
 you have push privileges; don't forget to log in to the registry using `docker login`.
 
 Your folder now should contain the following:
 
 ```bash
 hello-rstats/handler.R
-hello-rstats/PACKAGES
+hello-rstats/DESCRIPTION
 hello-rstats.yml
 ```
 
 The `handler.R` file does the heavy lifting by executing the desired
-functionality. `PACKAGES` describes the dependencies.
+functionality. `DESCRIPTION` lists the dependencies.
 The `hello-rstats.yml` is the stack file used to configure functions
 (read more [here](https://docs.openfaas.com/reference/yaml/)).
 
@@ -80,23 +81,23 @@ faas-cli up -f hello-rstats.yml
 `faas-cli up` is a [shorthand](https://docs.openfaas.com/cli/templates/)
 for automating `faas-cli build`, `faas-cli push`, and `faas-cli deploy`.
 
-Once the function is deployed, you can test it in the UI (at http://localhost:8080/ui/)
+Once the function is deployed, you can test it in the UI (e.g. at http://localhost:8080/ui/)
 or using curl:
 
 ```bash
 curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
 ```
 
-Both should should give the JSON output `["Hello Friend!"]`.
+Both should give the JSON output `["Hello Friend!"]`.
 
 ### Customize your function
 
 You can now edit `./hello-rstats/handler.R` to your liking.
-Don't forget to add dependencies to `./hello-rstats/PACKAGES` file.
+Don't forget to add dependencies to `./hello-rstats/DESCRIPTION` file.
 
 For example, calculate principal components
 based on an input data array using the
-[{vegan}](https://CRAN.R-project.org/package=vegan) R package.
+[vegan](https://CRAN.R-project.org/package=vegan) R package.
 
 The `./hello-rstats/handler.R` file should look like this:
 
@@ -107,35 +108,39 @@ handle <- function(req) {
 }
 ```
 
-Add the {vegan} package to the `./hello-rstats/PACKAGES` file, which now
+Add the vegan package to the `./hello-rstats/DESCRIPTION` file, which now
 looks like this:
 
-```bash
-jsonlite
-vegan
+```yaml
+Package: OpenFaaS
+Version: 0.0.1
+Imports:
+  vegan
+Remotes:
+SystemRequirements:
+VersionedPackages:
 ```
 
-The template installs dependencies specified in the `PACKAGES` file:
-one dependency per line, separator is new line.
-[CRAN](https://cran.r-project.org/) packages can be specified by
-their `name`s, or as `name@version`.
-Remotes can be defined according to specs in the
-[{remotes}](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html)
-package. This includes GitHub, GitLab, Bitbucket, local files, etc.
+The template installs dependencies specified in the `DESCRIPTION` file
+in this order:
 
-You might also have to add system dependencies for your required packages.
-This is a grey area of the R package ecosystem, see some helpful pointers
-[here](https://github.com/rstudio/r-system-requirements)
-and [here](https://github.com/r-hub/sysreqs)
-(the templates are using the Debian-based `rocker/r-base` Docker image from the
-[rocker](https://github.com/rocker-org) project).
+1. `SystemRequirements:` list OS specific sysreqs here, comma separated, these are then installed by the OS's package manager,
+2. CRAN packages listed in `Depends:`, `Imports:`, `LinkingTo:` fields are installed by `remotes::install_deps()`,
+3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
+4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and commas inside parenthesis are important).
 
-System dependencies can be added as [build arguments](https://docs.openfaas.com/cli/build/#30-pass-custom-build-arguments) (see how to work with build options
-[here](https://github.com/analythium/openfaas-rstats-templates/issues/10)):
+You can also modify the `Dockerfile` in the template if specific
+R version or further customization is needed.
+The templates are using the following base images:
 
-```bash
-faas-cli build -f hello-rstats.yml --build-arg ADDITIONAL_PACKAGE="git-core libssl-dev libcurl4-gnutls-dev"
-```
+- Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
+- Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses RSPM binaries),
+- Alpine-based `rhub/r-minimal` Docker image the [rr-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
+
+System requirements for the same package might be different across
+Linux distros. This is a grey area of the R package ecosystem, see
+[rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
+and [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb) for help.
 
 After pushing and deploying the function,
 we can test either in the UI or with curl:
