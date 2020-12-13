@@ -5,6 +5,9 @@
 
 - [R (rstats) templates for OpenFaaS](#r-rstats-templates-for-openfaas)
   - [Introduction](#introduction)
+    - [Base images](#base-images)
+    - [Watchdog type](#watchdog-type)
+    - [Server framework (for of-watchdog)](#server-framework-for-of-watchdog)
   - [Usage](#usage)
     - [Setup](#setup)
     - [Make a new function](#make-a-new-function)
@@ -14,25 +17,42 @@
 
 The `/template` folder contains the following OpenFaaS templates:
 
-- `rstats` with [classic watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
-- `rstats-http` [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
+| Template | Base image | Watchdog | Server framework |
+|----------|------------|----------|------------------|
+| rstats-base | rocker/r-base | classic | None (stdio) |
+| rstats-base-plumber | rocker/r-base | of-watchdog | plumber |
+| rstats-ubuntu | rocker/r-ubuntu | classic | None (stdio) |
+| rstats-ubuntu-plumber | rocker/r-ubuntu | of-watchdog | plumber |
+| rstats-minimal | rhub/r-minimal | classic | None (stdio) |
 
-The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog)
-is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway
-and to invoke your chosen application.
-This is the init process for your container.
-The classic watchdog passes in the HTTP request
-via `stdin` and reads a HTTP response via `stdout`.
+The templates differ with respect to:
 
-The _http mode_ of the new [of-watchdog](https://github.com/openfaas-incubator/of-watchdog)
-provides more control over your HTTP responses ("hot functions", persistent connection pools,
-or caching). This is what the `rstats-http` template is using.
+- R base image,
+- watchdog type, and
+- the server framework used.
+
+### Base images
+
+* Debian based rocker/r-base: consistency for most adopted base images, call this base;
+* Ubuntu based rocker/r-ubuntu: long term support can be important in corporate context and it jives with RSPM, call this ubuntu;
+* Alpine based r-hub/r-minimal: small size is always a good thing, call this minimal.
+
+### Watchdog type
+
+* The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via `stdin` and reads a HTTP response via `stdout`.
+* The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching). This is what the `rstats-http` template is using.
+
+### Server framework (for of-watchdog)
+
+* plumber.
+
+More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr. **PRs are welcome!**
 
 ## Usage
 
 ### Setup
 
-It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first 
+It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first
 and set up a local or remote Kubernetes or Docker Swarm installation with
 OpenFaaS deployed to the cluster (see docs [here](https://docs.openfaas.com/deployment/)).
 To get going quickly,
@@ -81,8 +101,8 @@ faas-cli up -f hello-rstats.yml
 `faas-cli up` is a [shorthand](https://docs.openfaas.com/cli/templates/)
 for automating `faas-cli build`, `faas-cli push`, and `faas-cli deploy`.
 
-Once the function is deployed, you can test it in the UI (e.g. at http://localhost:8080/ui/)
-or using curl:
+Once the function is deployed, you can test it in the UI
+(e.g. at `http://localhost:8080/ui/`) or using curl:
 
 ```bash
 curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
