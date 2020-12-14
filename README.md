@@ -7,7 +7,7 @@
   - [Introduction](#introduction)
     - [Base images](#base-images)
     - [Watchdog type](#watchdog-type)
-    - [Server framework (for of-watchdog)](#server-framework-for-of-watchdog)
+    - [Server framework (for of-watchdog only)](#server-framework-for-of-watchdog-only)
   - [Usage](#usage)
     - [Setup](#setup)
     - [Make a new function](#make-a-new-function)
@@ -34,21 +34,21 @@ The templates differ with respect to:
 
 ### Base images
 
-* Debian based [rocker/r-base](https://github.com/rocker-org/rocker/tree/master/r-base): consistency for most adopted base images;
-* Ubuntu based [rocker/r-ubuntu](https://github.com/rocker-org/rocker/tree/master/r-ubuntu): long term support can be important in corporate context and it jives with [RSPM](https://packagemanager.rstudio.com/client/#/);
-* Alpine based [r-hub/r-minimal](https://github.com/r-hub/r-minimal): small size is always a good thing.
+- Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
+- Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
+- Alpine-based `rhub/r-minimal` Docker image the [r-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
 
 ### Watchdog type
 
-* The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via STDIN and reads a HTTP response via STDOUT.
-* The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching).
+- The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via STDIN and reads a HTTP response via STDOUT.
+- The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching).
 
 The of-watchdog _http mode_ loads the handler as a small background web server.
 The classic watchdog's forking mode would instead load this file for every invocation creating additional latency when loading packages, saved data, or trained models.
 
-### Server framework (for of-watchdog)
+### Server framework (for of-watchdog only)
 
-* [plumber](https://www.rplumber.io/).
+- [plumber](https://www.rplumber.io/).
 
 More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr.
 See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**

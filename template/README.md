@@ -68,8 +68,8 @@ R version or further customization is needed.
 The templates are using the following base images:
 
 - Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
-- Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses RSPM binaries),
-- Alpine-based `rhub/r-minimal` Docker image the [rr-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
+- Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
+- Alpine-based `rhub/r-minimal` Docker image the [r-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
 
 System requirements for the same packages might be different across
 Linux distros. This is a grey area of the R package ecosystem, see
