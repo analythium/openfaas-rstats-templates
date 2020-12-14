@@ -34,9 +34,9 @@ The templates differ with respect to:
 
 ### Base images
 
-* Debian based [rocker/r-base](https://github.com/rocker-org/rocker/tree/master/r-base): consistency for most adopted base images, call this base;
-* Ubuntu based [rocker/r-ubuntu](https://github.com/rocker-org/rocker/tree/master/r-ubuntu): long term support can be important in corporate context and it jives with RSPM, call this ubuntu;
-* Alpine based [r-hub/r-minimal](https://github.com/r-hub/r-minimal): small size is always a good thing, call this minimal.
+* Debian based [rocker/r-base](https://github.com/rocker-org/rocker/tree/master/r-base): consistency for most adopted base images;
+* Ubuntu based [rocker/r-ubuntu](https://github.com/rocker-org/rocker/tree/master/r-ubuntu): long term support can be important in corporate context and it jives with [RSPM](https://packagemanager.rstudio.com/client/#/);
+* Alpine based [r-hub/r-minimal](https://github.com/r-hub/r-minimal): small size is always a good thing.
 
 ### Watchdog type
 
