@@ -1,12 +1,12 @@
 # R (rstats) templates for OpenFaaS
 
-This directory contains the `rstats` and `rstats-http` templates with [classic](https://github.com/openfaas/faas/tree/master/watchdog) and [of-watchdog](https://github.com/openfaas-incubator/of-watchdog).
+This directory contains the _stable_ OpenFaaS R templates.
 
 ## Structure
 
 The templates follow similar structure:
 
-```
+```tree
 .
 ├── Dockerfile
 ├── README.md
