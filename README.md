@@ -34,18 +34,21 @@ The templates differ with respect to:
 
 ### Base images
 
-* Debian based rocker/r-base: consistency for most adopted base images, call this base;
-* Ubuntu based rocker/r-ubuntu: long term support can be important in corporate context and it jives with RSPM, call this ubuntu;
-* Alpine based r-hub/r-minimal: small size is always a good thing, call this minimal.
+* Debian based [rocker/r-base](https://github.com/rocker-org/rocker/tree/master/r-base): consistency for most adopted base images, call this base;
+* Ubuntu based [rocker/r-ubuntu](https://github.com/rocker-org/rocker/tree/master/r-ubuntu): long term support can be important in corporate context and it jives with RSPM, call this ubuntu;
+* Alpine based [r-hub/r-minimal](https://github.com/r-hub/r-minimal): small size is always a good thing, call this minimal.
 
 ### Watchdog type
 
 * The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via `stdin` and reads a HTTP response via `stdout`.
 * The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching). This is what the `rstats-http` template is using.
 
+The of-watchdog _http mode_ loads the handler as a small background web server.
+The classic watchdog's forking mode would instead load this file for every invocation creating additional latency when loading packages, saved data, or trained models.
+
 ### Server framework (for of-watchdog)
 
-* plumber.
+* [plumber](https://www.rplumber.io/).
 
 More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr.
 See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
@@ -70,7 +73,7 @@ Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
 faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 ```
 
-Now `faas-cli new --list` should give you a list with the available `rstats` templates.
+Now `faas-cli new --list` should give you a list with the available `rstats-*` templates.
 
 Create a new function called `hello-rstats`:
 
@@ -153,11 +156,6 @@ in this order:
 
 You can also modify the `Dockerfile` in the template if specific
 R version or further customization is needed.
-The templates are using the following base images:
-
-- Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
-- Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses RSPM binaries),
-- Alpine-based `rhub/r-minimal` Docker image the [rr-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
 
 System requirements for the same package might be different across
 Linux distros. This is a grey area of the R package ecosystem, see
@@ -176,7 +174,4 @@ curl http://localhost:8080/function/hello-rstats -H \
 Now you should see the JSON output
 `[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
 
-Note that the of-watchdog _http mode_ loads the handler as a
-small background web server. The classic watchdog's forking mode
-would instead load this file for every invocation creating additional latency
-when loading packages, saved data, or trained models.
+
