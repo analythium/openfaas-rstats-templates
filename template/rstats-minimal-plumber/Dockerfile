@@ -4,23 +4,23 @@ FROM rhub/r-minimal:latest
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# Install system requirements for index.R as needed
-#RUN apk update
-#RUN apk add automake libtool m4 autoconf linux-headers \
-#    libsodium-dev gnutls-dev openssl-dev \
-#    icu-libs
-#    RUN rm -rf /var/cache/apk/*
-
 # Change options as needed in Rprofile.site
 COPY Rprofile.site /etc/R
 ENV _R_SHLIB_STRIP_=true
 
-# Install basic dependencies for index.R
-#RUN installr -d remotes plumber
+# Install system requirements and dependencies for index.R as needed
+# See tips for alpine 3.12 https://github.com/rstudio/httpuv/issues/280
+RUN apk update
+RUN apk add --no-cache --update-cache \
+    --repository http://nl.alpinelinux.org/alpine/v3.11/main \
+    autoconf=2.69-r2 \
+    automake=1.16.1-r0 \
+    bash libsodium libsodium-dev
+#RUN R -q -e 'install.packages("sodium", repos="https://cloud.r-project.org")'
 RUN installr -d \
-    -t "R-dev file automake autoconf linux-headers libxml2-dev libsodium-dev gnutls-dev openssl-dev" \
+    -t "R-dev file linux-headers libxml2-dev gnutls-dev openssl-dev" \
     -a "libxml2 icu-libs" \
-    emotes plumber
+    remotes plumber
 COPY install.R /usr/local/bin/
 
 # Create a non-root user

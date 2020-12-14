@@ -1,9 +1,9 @@
 # R/plumber template for OpenFaaS with of-watchdog
 
-> Sends and receives JSON using [{plumber}](https://www.rplumber.io/)
+> Sends and receives JSON using [plumber](https://www.rplumber.io/)
 > and [of-watchdog](https://github.com/openfaas/of-watchdog).
 
-This template uses the rocker/r-base:latest image.
+This template uses the rhub/r-minimal:latest image.
 
 ## Making a new function
 
@@ -16,15 +16,15 @@ faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 Create a new function
 
 ```bash
-faas-cli new --lang rstats-base-plumber r-base-plumber-hello --prefix=dockeruser
+faas-cli new --lang rstats-minimal-plumber r-minimal-plumber-hello --prefix=dockeruser
 ```
 
 ## Customizing your function
 
-Now we have a `r-base-plumber-hello.yml` file and function folder `./r-base-plumber-hello`.
+Now we have a `r-minimal-plumber-hello.yml` file and function folder `./r-minimal-plumber-hello`.
 Files in the function folder will get copied to the `/home/app` directory of the image.
 Read more about the [YAML configuration](https://docs.openfaas.com/reference/yaml/).
-Customize the `./r-base-plumber-hello/handler.R` file as needed:
+Customize the `./r-minimal-plumber-hello/handler.R` file as needed:
 
 - load required packages using `library()`,
 - put your data in the folder and load it relative to the function folder (e.g. `data.RData`) or use the full path (e.g. `/home/app/data.csv`),
@@ -38,7 +38,7 @@ The `up` command includes `build` (build an image into the local Docker library)
 and `deploy` (deploy your function into a cluster):
 
 ```bash
-faas-cli up -f r-base-plumber-hello.yml
+faas-cli up -f r-minimal-plumber-hello.yml
 ```
 
 ## Testing
@@ -46,7 +46,7 @@ faas-cli up -f r-base-plumber-hello.yml
 Test the local Docker image forwarding to port 4000
 
 ```bash
-docker run -p 4000:8080 dockeruser/r-base-plumber-hello
+docker run -p 4000:8080 dockeruser/r-minimal-plumber-hello
 ```
 
 Curl should return `["Hello Friend!"]`:
@@ -85,7 +85,7 @@ curl http://localhost:8080/function/<function-name> -d '["Friend"]'
 Create a new function:
 
 ```bash
-faas-cli new --lang rstats-base-plumber r-base-pca --prefix=dockeruser
+faas-cli new --lang rstats-minimal-plumber r-minimal-pca --prefix=dockeruser
 ```
 
 Change `handler.R`:
@@ -110,8 +110,8 @@ SystemRequirements:
 VersionedPackages:
 ```
 
-Build the image: `faas-cli build -f r-base-pca.yml` and
-test with `docker run -p 4000:8080 dockeruser/r-base-pca` and
+Build the image: `faas-cli build -f r-minimal-pca.yml` and
+test with `docker run -p 4000:8080 dockeruser/r-minimal-pca` and
 
 ```bash
 curl http://localhost:4000/ -H \
