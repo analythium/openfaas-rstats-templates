@@ -19,11 +19,12 @@ The `/template` folder contains the following OpenFaaS templates:
 
 | Template | Base image | Watchdog | Server framework |
 |----------|------------|----------|------------------|
-| rstats-base | rocker/r-base | classic | None (stdio) |
-| rstats-base-plumber | rocker/r-base | of-watchdog | plumber |
-| rstats-ubuntu | rocker/r-ubuntu | classic | None (stdio) |
-| rstats-ubuntu-plumber | rocker/r-ubuntu | of-watchdog | plumber |
-| rstats-minimal | rhub/r-minimal | classic | None (stdio) |
+| [rstats-base](template/rstats-base) | rocker/r-base | classic | None (STDIO) |
+| [rstats-base-plumber](template/rstats-base-plumber) | rocker/r-base | of-watchdog | plumber |
+| [rstats-ubuntu](template/rstats-ubuntu) | rocker/r-ubuntu | classic | None (STDIO) |
+| [rstats-ubuntu-plumber](template/rstats-ubuntu-plumber) | rocker/r-ubuntu | of-watchdog | plumber |
+| [rstats-minimal](template/rstats-minimal) | rhub/r-minimal | classic | None (STDIO) |
+| [rstats-minimal-plumber](template/rstats-minimal-plumber) | rhub/r-minimal | of-watchdog | plumber |
 
 The templates differ with respect to:
 
@@ -46,7 +47,8 @@ The templates differ with respect to:
 
 * plumber.
 
-More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr. **PRs are welcome!**
+More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr.
+See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
 
 ## Usage
 
