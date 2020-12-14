@@ -40,8 +40,8 @@ The templates differ with respect to:
 
 ### Watchdog type
 
-* The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via `stdin` and reads a HTTP response via `stdout`.
-* The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching). This is what the `rstats-http` template is using.
+* The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via STDIN and reads a HTTP response via STDOUT.
+* The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching).
 
 The of-watchdog _http mode_ loads the handler as a small background web server.
 The classic watchdog's forking mode would instead load this file for every invocation creating additional latency when loading packages, saved data, or trained models.
