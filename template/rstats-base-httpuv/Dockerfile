@@ -1,5 +1,5 @@
 FROM openfaas/of-watchdog:0.8.1 as watchdog
-FROM rocker/r-ubuntu:18.04
+FROM rocker/r-base:latest
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -20,9 +20,7 @@ ENV _R_SHLIB_STRIP_=true
 
 # Install basic dependencies for index.R
 # some packages seem to require build from source
-RUN install2.r -e remotes
-RUN R -q -e 'install.packages(c("Rcpp", "httpuv"), repos=c(CRAN = "https://cloud.r-project.org"))'
-
+RUN install2.r -e remotes Rcpp httpuv
 COPY install.R /usr/local/bin/
 
 # Create a non-root user

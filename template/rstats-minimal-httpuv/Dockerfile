@@ -1,28 +1,26 @@
 FROM openfaas/of-watchdog:0.8.1 as watchdog
-FROM rocker/r-ubuntu:18.04
+FROM rhub/r-minimal:latest
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
-
-# Install system requirements for index.R as needed
-RUN apt-get update && apt-get install -y \
-    --no-install-recommends \
-    make \
-    libssl-dev \
-    libcurl4-gnutls-dev \
-    libxml2-dev \
-    libstdc++6 \
-    && rm -rf /var/lib/apt/lists/*
 
 # Change options as needed in Rprofile.site
 COPY Rprofile.site /etc/R
 ENV _R_SHLIB_STRIP_=true
 
-# Install basic dependencies for index.R
-# some packages seem to require build from source
-RUN install2.r -e remotes
-RUN R -q -e 'install.packages(c("Rcpp", "httpuv"), repos=c(CRAN = "https://cloud.r-project.org"))'
-
+# Install system requirements and dependencies for index.R as needed
+# See tips for alpine 3.12 https://github.com/rstudio/httpuv/issues/280
+RUN apk update
+RUN apk add --no-cache --update-cache \
+    --repository http://nl.alpinelinux.org/alpine/v3.11/main \
+    autoconf=2.69-r2 \
+    automake=1.16.1-r0
+#    bash libsodium libsodium-dev
+#RUN R -q -e 'install.packages("sodium", repos="https://cloud.r-project.org")'
+RUN installr -d \
+    -t "R-dev file linux-headers libxml2-dev gnutls-dev openssl-dev" \
+    -a "libxml2" \
+    remotes httpuv
 COPY install.R /usr/local/bin/
 
 # Create a non-root user
@@ -37,9 +35,9 @@ COPY function          .
 # Istall SystemRequirements for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
 RUN echo requirements.txt
-RUN apt-get update
-RUN xargs -a requirements.txt apt-get install -y --no-install-recommends
-RUN rm -rf /var/lib/apt/lists/*
+RUN apk update
+RUN xargs -a requirements.txt apk add
+RUN rm -rf /var/cache/apk/*
 RUN rm requirements.txt
 
 # Install packages (incl. remotes) for handler.R from DESCRIPTION
@@ -52,7 +50,7 @@ RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
 RUN chown app:app -R /home/app
 USER app
 
-ENV fprocess="Rscript index.R"
+ENV fprocess="R --slave -f index.R"
 ENV mode="http"
 ENV http_upstream_url="http://127.0.0.1:5000"
 
