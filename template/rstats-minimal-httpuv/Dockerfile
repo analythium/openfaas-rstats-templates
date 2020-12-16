@@ -14,13 +14,12 @@ RUN apk update
 RUN apk add --no-cache --update-cache \
     --repository http://nl.alpinelinux.org/alpine/v3.11/main \
     autoconf=2.69-r2 \
-    automake=1.16.1-r0
-#    bash libsodium libsodium-dev
-#RUN R -q -e 'install.packages("sodium", repos="https://cloud.r-project.org")'
+    automake=1.16.1-r0 \
+    bash gcc
 RUN installr -d \
     -t "R-dev file linux-headers libxml2-dev gnutls-dev openssl-dev" \
     -a "libxml2" \
-    remotes httpuv
+    remotes httpuv jsonlite
 COPY install.R /usr/local/bin/
 
 # Create a non-root user
