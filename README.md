@@ -21,10 +21,13 @@ The `/template` folder contains the following OpenFaaS templates:
 |----------|------------|----------|------------------|
 | [rstats-base](template/rstats-base) | rocker/r-base | classic | None (STDIO) |
 | [rstats-base-plumber](template/rstats-base-plumber) | rocker/r-base | of-watchdog | plumber |
+| [rstats-base-httpuv](template/rstats-base-httpuv) | rocker/r-base | of-watchdog | httpuv |
 | [rstats-ubuntu](template/rstats-ubuntu) | rocker/r-ubuntu | classic | None (STDIO) |
 | [rstats-ubuntu-plumber](template/rstats-ubuntu-plumber) | rocker/r-ubuntu | of-watchdog | plumber |
+| [rstats-ubuntu-httpuv](template/rstats-ubuntu-httpuv) | rocker/r-ubuntu | of-watchdog | httpuv |
 | [rstats-minimal](template/rstats-minimal) | rhub/r-minimal | classic | None (STDIO) |
 | [rstats-minimal-plumber](template/rstats-minimal-plumber) | rhub/r-minimal | of-watchdog | plumber |
+| [rstats-minimal-httpuv](template/rstats-minimal-httpuv) | rhub/r-minimal | of-watchdog | httpuv |
 
 The templates differ with respect to:
 
@@ -32,7 +35,7 @@ The templates differ with respect to:
 - watchdog type, and
 - the server framework used.
 
-### Base images
+### Base image
 
 - Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
 - Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
@@ -48,9 +51,15 @@ The classic watchdog's forking mode would instead load this file for every invoc
 
 ### Server framework (for of-watchdog only)
 
-- [plumber](https://www.rplumber.io/).
+Frameworks are listed in the order of their dependence relationships:
 
-More server frameworks are being explored, such as the Rserve based RestRserve, or the httpuv based opencpu, fiery, and beakr.
+- [httpuv](https://CRAN.R-project.org/package=httpuv).
+  - [plumber](https://www.rplumber.io/).
+
+More server frameworks are being explored, such as the 
+[Rserve](https://www.rforge.net/Rserve/) based [RestRserve](https://restrserve.org/),
+or the httpuv based [opencpu](https://www.opencpu.org/), 
+[fiery](https://CRAN.R-project.org/package=fiery), and [beakr](https://CRAN.R-project.org/package=beakr).
 See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
 
 ## Usage
