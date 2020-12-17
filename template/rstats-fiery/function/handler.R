@@ -1,3 +1,3 @@
-handle <- function(body) {
-  list(return=paste0('Hello ', body$name, '!'))
+handle <- function(request) {
+  jsonlite::toJSON(paste0('Hello ', request$body, '!'))
 }

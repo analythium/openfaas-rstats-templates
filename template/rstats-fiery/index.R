@@ -2,33 +2,18 @@
 
 suppressMessages(library(fiery))
 suppressMessages(library(reqres))
+## needs parallelly and globals as well
 
 source("function/handler.R")
 
-# Create a New App
 app <- Fire$new(host = '0.0.0.0', port = 5000L)
 
-# Handle requests
-app$on('request', function(server, request, ...) {
+app$on('request', function(server, id, request, ...) {
+  request$parse(json = parse_json())
   response <- request$respond()
   response$status <- 200L
-
-  request$set_body(NULL)
-  request$parse(
-    txt = parse_plain(),
-    html = parse_html(),
-    json = parse_json()
-  )
-
-  response$body <- handle(request$body)
-  response$format(json = format_json())
+  response$body <- handle(request)
   response$type <- 'Application/json; charset=utf-8'
-})
-
-# Be polite
-app$on('end', function(server) {
-  message('Goodbye')
-  flush.console()
 })
 
 app$ignite()
