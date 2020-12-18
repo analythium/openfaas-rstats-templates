@@ -3,11 +3,11 @@
 # load plumber
 suppressMessages(library(plumber))
 
-# source handler.R script
-source("handler.R")
-
 # create new Plumber router
 pr <- Plumber$new()
+
+# source handler.R script
+source("handler.R")
 
 # note: only pass req or res when used to avoid
 # `simpleError in handle(req, res): unused argument (res)`
