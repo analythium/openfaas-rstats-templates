@@ -5,7 +5,7 @@
 
 - [R (rstats) templates for OpenFaaS](#r-rstats-templates-for-openfaas)
   - [Introduction](#introduction)
-    - [Base images](#base-images)
+    - [Base image](#base-image)
     - [Watchdog type](#watchdog-type)
     - [Server framework (for of-watchdog only)](#server-framework-for-of-watchdog-only)
   - [Usage](#usage)
@@ -20,14 +20,20 @@ The `/template` folder contains the following OpenFaaS templates:
 | Template | Base image | Watchdog | Server framework |
 |----------|------------|----------|------------------|
 | [rstats-base](template/rstats-base) | rocker/r-base | classic | None (STDIO) |
-| [rstats-base-plumber](template/rstats-base-plumber) | rocker/r-base | of-watchdog | plumber |
-| [rstats-base-httpuv](template/rstats-base-httpuv) | rocker/r-base | of-watchdog | httpuv |
 | [rstats-ubuntu](template/rstats-ubuntu) | rocker/r-ubuntu | classic | None (STDIO) |
-| [rstats-ubuntu-plumber](template/rstats-ubuntu-plumber) | rocker/r-ubuntu | of-watchdog | plumber |
-| [rstats-ubuntu-httpuv](template/rstats-ubuntu-httpuv) | rocker/r-ubuntu | of-watchdog | httpuv |
 | [rstats-minimal](template/rstats-minimal) | rhub/r-minimal | classic | None (STDIO) |
+| [rstats-base-plumber](template/rstats-base-plumber) | rocker/r-base | of-watchdog | plumber |
+| [rstats-ubuntu-plumber](template/rstats-ubuntu-plumber) | rocker/r-ubuntu | of-watchdog | plumber |
 | [rstats-minimal-plumber](template/rstats-minimal-plumber) | rhub/r-minimal | of-watchdog | plumber |
+| [rstats-base-httpuv](template/rstats-base-httpuv) | rocker/r-base | of-watchdog | httpuv |
+| [rstats-ubuntu-httpuv](template/rstats-ubuntu-httpuv) | rocker/r-ubuntu | of-watchdog | httpuv |
 | [rstats-minimal-httpuv](template/rstats-minimal-httpuv) | rhub/r-minimal | of-watchdog | httpuv |
+| [rstats-base-beakr](template/rstats-base-beakr) | rocker/r-base | of-watchdog | beakr |
+| [rstats-ubuntu-beakr](template/rstats-ubuntu-beakr) | rocker/r-ubuntu | of-watchdog | beakr |
+| [rstats-minimal-beakr](template/rstats-minimal-beakr) | rhub/r-minimal | of-watchdog | beakr |
+| [rstats-base-fiery](template/rstats-base-fiery) | rocker/r-base | of-watchdog | fiery |
+| [rstats-ubuntu-fiery](template/rstats-ubuntu-fiery) | rocker/r-ubuntu | of-watchdog | fiery |
+| [rstats-minimal-fiery](template/rstats-minimal-fiery) | rhub/r-minimal | of-watchdog | fiery |
 
 The templates differ with respect to:
 
@@ -53,13 +59,14 @@ The classic watchdog's forking mode would instead load this file for every invoc
 
 Frameworks are listed in the order of their dependence relationships:
 
-- [httpuv](https://CRAN.R-project.org/package=httpuv).
-  - [plumber](https://www.rplumber.io/).
+- [httpuv](https://CRAN.R-project.org/package=httpuv)
+  - [plumber](https://www.rplumber.io/)
+  - [fiery](https://CRAN.R-project.org/package=fiery)
+  - [beakr](https://CRAN.R-project.org/package=beakr)
 
 More server frameworks are being explored, such as the 
 [Rserve](https://www.rforge.net/Rserve/) based [RestRserve](https://restrserve.org/),
-or the httpuv based [opencpu](https://www.opencpu.org/), 
-[fiery](https://CRAN.R-project.org/package=fiery), and [beakr](https://CRAN.R-project.org/package=beakr).
+or the httpuv based [opencpu](https://www.opencpu.org/).
 See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
 
 ## Usage
