@@ -170,7 +170,7 @@ in this order:
 1. `SystemRequirements:` list OS specific sysreqs here, comma separated, these are then installed by the OS's package manager,
 2. CRAN packages listed in `Depends:`, `Imports:`, `LinkingTo:` fields are installed by `remotes::install_deps()`,
 3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
-4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and commas inside parenthesis are important).
+4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and after commas inside parentheses are important, e.g. `devtools (1.11.0), mypackage (>= 1.12.0, < 1.14)`).
 
 You can also modify the `Dockerfile` in the template if specific
 R version or further customization is needed.
