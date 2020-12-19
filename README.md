@@ -1,5 +1,7 @@
 # R (rstats) templates for OpenFaaS
 
+<img src="https://hub.analythium.io/assets/web/faastr.png" align="right" style="padding-left:10px;background-color:white;" />
+
 > This project provides [OpenFaaS](https://www.openfaas.com/)
 > templates for the [R](https://www.r-project.org/) language.
 
