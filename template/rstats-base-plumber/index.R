@@ -9,12 +9,11 @@ pr <- Plumber$new()
 # source handler.R script
 source("handler.R")
 
-# note: only pass req or res when used to avoid
-# `simpleError in handle(req, res): unused argument (res)`
-pr$handle("POST", "/", function(req) {
+# handle with simple error
+pr$handle("POST", "/", function(req, res) {
   tryCatch(handle(req), error = function(e) {
     res$status <- 400
-    return(list(error = e, traceback = ...))
+    return(list(error = as.character(e)))
   })
 })
 

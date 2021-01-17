@@ -14,6 +14,8 @@
     - [Setup](#setup)
     - [Make a new function](#make-a-new-function)
     - [Customize your function](#customize-your-function)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Introduction
 
@@ -48,6 +50,8 @@ The templates differ with respect to:
 - Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
 - Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
 - Alpine-based `rhub/r-minimal` Docker image the [r-hub](https://github.com/r-hub/r-minimal) project for smallest image sizes.
+
+See the [Rocker](https://journal.r-project.org/archive/2017/RJ-2017-065/RJ-2017-065.pdf) and the [Rockerverse](https://journal.r-project.org/archive/2020/RJ-2020-007/RJ-2020-007.pdf) papers in the R Journal about the current state of the art regarding the use of container technology in R.
 
 ### Watchdog type
 
@@ -96,7 +100,7 @@ Now `faas-cli new --list` should give you a list with the available `rstats-*` t
 Create a new function called `hello-rstats`:
 
 ```bash
-faas-cli new --lang rstats-http hello-rstats --prefix=dockeruser
+faas-cli new --lang rstats-base hello-rstats --prefix=dockeruser
 ```
 
 the `dockeruser` means a user or organization on e.g. Docker Hub where
@@ -192,4 +196,13 @@ curl http://localhost:8080/function/hello-rstats -H \
 Now you should see the JSON output
 `[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
 
+See more examples in the [examples](examples/README.md) folder of the repository.
 
+## Contributing
+
+Please read the [code of conduct](CODE_OF_CONDUCT.md).
+Sign commits that are submitted as PR.
+
+## License
+
+Copyright (c) 2018, Peter Solymos, Analythium Solutions Inc. [MIT](LICENSE.md)

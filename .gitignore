@@ -48,5 +48,4 @@ Temporary Items
 .Rproj.user*
 .Rproj.user
 
-# Exclude tmp folder
-tmp/
+build
