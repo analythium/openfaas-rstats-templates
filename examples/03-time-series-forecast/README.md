@@ -1,6 +1,6 @@
 # Time Series Forecast
 
-[Exponential smoothing](https://en.wikipedia.org/wiki/Exponential_smoothing) is a forecasting methods.
+[Exponential smoothing](https://en.wikipedia.org/wiki/Exponential_smoothing) is a forecasting method.
 
 We will create a function that pulls JSON data from public [COVID-19 data API](https://github.com/analythium/covid-19#readme), fits exponential smoothing model and returns the forecast results as JSON.
 
