@@ -189,9 +189,7 @@ Test the deployed instance:
 ```bash
 curl -X GET -G \
   $OPENFAAS_URL/function/r-covid \
-  -d region=canada-combined \
-  -d cases=confirmed \
-  -d window=4
+  -d region=canada-combined
 ```
 
 The output should still be same as above.
