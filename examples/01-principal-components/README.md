@@ -51,7 +51,8 @@ Create a new function called `r-pca`.
 faas-cli new --lang rstats-ubuntu-plumber r-pca
 ```
 
-Note: we dropped the ` --prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
+Note: we dropped the `--prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
+
 ## Customize the function
 
 Change the `./r-pca/handler.R` file.

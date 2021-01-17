@@ -51,7 +51,8 @@ Create a new function called `r-iris`.
 ```bash
 faas-cli new --lang rstats-base-plumber r-iris
 ```
-Note: we dropped the ` --prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
+
+Note: we dropped the `--prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
 
 ## Customize the function
 
@@ -76,7 +77,7 @@ library(e1071) # library with SVM function
 data(iris)     # Iris data set
 
 str(iris) # see the measured variables
-'data.frame':	150 obs. of  5 variables:
+'data.frame': 150 obs. of  5 variables:
 # $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 # $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
 # $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
