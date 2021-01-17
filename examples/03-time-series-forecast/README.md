@@ -125,10 +125,11 @@ curl http://localhost:4000/ -H \
   '{"region": "canada-combined", "cases": "confirmed", "window": 4}'
 ```
 
-curl http://localhost:5000/ -H \
-  "Content-Type: application/json" -d \
-  '{"region": "canada-combined", "cases": "confirmed", "window": 4}'
+The key-value pairs are as follows:
 
+- region: a region slug value for the API endpoint in global data set (see [available values](https://hub.analythium.io/covid-19/api/v1/regions/)),
+- cases: one of `"confirmed"` or `"deaths"`,
+- windows: a positive integer giving the forecast horizon in days.
 
 Test we can test teh deployed instance in the [UI](https://docs.openfaas.com/architecture/gateway/) or with curl:
 
