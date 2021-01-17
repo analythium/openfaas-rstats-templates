@@ -87,6 +87,7 @@ follow the official OpenFaaS [workshop](https://docs.openfaas.com/tutorials/work
 or enroll into the free
 [Introduction to Serverless on Kubernetes](https://www.edx.org/course/introduction-to-serverless-on-kubernetes) course.
 
+See recommended [setup steps](examples/README.md) for the R template examples.
 ### Make a new function
 
 Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
@@ -129,44 +130,20 @@ faas-cli up -f hello-rstats.yml
 for automating `faas-cli build`, `faas-cli push`, and `faas-cli deploy`.
 
 Once the function is deployed, you can test it in the UI
-(e.g. at `http://localhost:8080/ui/`) or using curl:
+(e.g. at `OPENFAAS_URL/ui/`) or using curl:
 
 ```bash
-curl http://localhost:8080/function/hello-rstats -d '["Friend"]'
+curl $OPENFAAS_URL/function/hello-rstats -d '["World"]'
 ```
 
-Both should give the JSON output `["Hello Friend!"]`.
+Both should give the JSON output `"Hello World!"`.
 
 ### Customize your function
 
 You can now edit `./hello-rstats/handler.R` to your liking.
 Don't forget to add dependencies to `./hello-rstats/DESCRIPTION` file.
 
-For example, calculate principal components
-based on an input data array using the
-[vegan](https://CRAN.R-project.org/package=vegan) R package.
-
-The `./hello-rstats/handler.R` file should look like this:
-
-```bash
-handle <- function(req) {
-  x <- jsonlite::fromJSON(paste(req$postBody))
-  vegan::rda(x)$CA$u
-}
-```
-
-Add the vegan package to the `./hello-rstats/DESCRIPTION` file, which now
-looks like this:
-
-```yaml
-Package: OpenFaaS
-Version: 0.0.1
-Imports:
-  vegan
-Remotes:
-SystemRequirements:
-VersionedPackages:
-```
+See [worked examples](examples/README.md) for different use cases.
 
 The template installs dependencies specified in the `DESCRIPTION` file
 in this order:
@@ -183,20 +160,6 @@ System requirements for the same package might be different across
 Linux distros. This is a grey area of the R package ecosystem, see
 [rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
 and [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb) for help.
-
-After pushing and deploying the function,
-we can test either in the UI or with curl:
-
-```bash
-curl http://localhost:8080/function/hello-rstats -H \
-  "Content-Type: application/json" -d \
-  '[[-1,3,16],[10,-10,9],[-5,10,-14],[14,3,-12]] '
-```
-
-Now you should see the JSON output
-`[[0.5099,0.5251,-0.4629],[0.479,-0.4319,0.5779],[-0.598,0.4699,0.4143],[-0.391,-0.563,-0.5293]]`.
-
-See more examples in the [examples](examples/README.md) folder of the repository.
 
 ## Contributing
 
