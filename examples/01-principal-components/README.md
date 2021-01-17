@@ -45,7 +45,7 @@ faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 
 This example uses the `rstats-ubuntu-plumber` template.
 
-Create a new function called `r-pca`. We use `psolymos` as docker user, replace it with your registry/user name as needed.
+Create a new function called `r-pca`.
 
 ```bash
 faas-cli new --lang rstats-ubuntu-plumber r-pca
@@ -98,7 +98,7 @@ faas-cli up -f r-pca.yml
 
 ## Testing
 
-Test the Docker image locally after `docker run -p 4000:8080 psolymos/r-pca`:
+Test the Docker image locally after `docker run -p 4000:8080 $OPENFAAS_PREFIX/r-pca`:
 
 ```bash
 curl http://localhost:4000/ -H \

@@ -46,7 +46,7 @@ faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
 
 This example uses the `rstats-base-plumber` template.
 
-Create a new function called `r-iris`. We use `psolymos` as docker user, replace it with your registry/user name as needed.
+Create a new function called `r-iris`.
 
 ```bash
 faas-cli new --lang rstats-base-plumber r-iris
@@ -115,7 +115,6 @@ When reading in the rda file, we don't need the directory because the file will 
 library(e1071)
 
 model <- readRDS("model.rda")
-cat("Trained model loaded\n")
 
 handle <- function(req) {
   x <- as.data.frame(
@@ -142,7 +141,7 @@ faas-cli up -f r-iris.yml
 
 ## Testing
 
-Test the Docker image locally after `docker run -p 4000:8080 psolymos/r-iris`:
+Test the Docker image locally after `docker run -p 4000:8080 $OPENFAAS_PREFIX/r-iris`:
 
 ```bash
 curl http://localhost:4000/ -H \
