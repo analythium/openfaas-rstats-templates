@@ -1,16 +1,23 @@
 # Principal Component Analysis (PCA)
 
-[PCA](https://en.wikipedia.org/wiki/Principal_component_analysis) is used for dimensionality reduction to obtain lower-dimensional representation of the data while preserving as much of the variation as possible. We will create a function that takes a multi-dimensional JSON array as input and returns principal coordinate axes as JSON.
+[PCA](https://en.wikipedia.org/wiki/Principal_component_analysis) is used for dimensionality reduction to obtain lower-dimensional representation of the data while preserving as much of the variation as possible.
+
+We will create a function that takes a multi-dimensional JSON array as input and returns principal coordinate axes as JSON.
 
 ## Prerequisites
 
-Install the [OpenFaaS CLI](https://docs.openfaas.com/cli/install/).
+__Step 1.__ Install the [OpenFaaS CLI](https://docs.openfaas.com/cli/install/).
 
-Set up your [k8s, k3s, or faasd with OpenFaaS](https://docs.openfaas.com/deployment/).
+__Step 2.__ Set up your [k8s, k3s, or faasd with OpenFaaS](https://docs.openfaas.com/deployment/).
 
-Use `docker login` to log into your registry of choice bor pushing images.
+__Step 3.__ Use `docker login` to log into your registry of choice for pushing images.
+Export your Docher Hub user or organization name:
 
-Log into your OpenFaaS instance (see more info [here](https://github.com/openfaas/workshop/blob/master/lab1b.md)):
+```bash
+export OPENFAAS_PREFIX="" # Populate with your Docker Hub username
+```
+
+__Step 4.__ Log into your OpenFaaS instance (see more info [here](https://github.com/openfaas/workshop/blob/master/lab1b.md)):
 
 ```bash
 export OPENFAAS_URL="http://174.138.114.98:8080" # Populate with your OpenFaaS URL
@@ -41,18 +48,19 @@ This example uses the `rstats-ubuntu-plumber` template.
 Create a new function called `r-pca`. We use `psolymos` as docker user, replace it with your registry/user name as needed.
 
 ```bash
-faas-cli new --lang rstats-ubuntu-plumber r-pca --prefix=psolymos
+faas-cli new --lang rstats-ubuntu-plumber r-pca
 ```
 
+Note: we dropped the ` --prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
 ## Customize the function
 
 Change the `./r-pca/handler.R` file.
 Note: loading libraries is good practice, it makes trouble shooting installation related
 issues much easier (i.e. when shared objects are not found doe to not building
-the package against specific libraries).
+the package against specific libraries). Startup messages can also be useful.
 
 ```R
-suppressMessages(library(vegan))
+library(vegan)
 handle <- function(req) {
   x <- jsonlite::fromJSON(paste(req$postBody))
   vegan::rda(x)$CA$u
