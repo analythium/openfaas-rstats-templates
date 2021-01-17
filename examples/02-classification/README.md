@@ -5,46 +5,11 @@ Classification is predicting which class a new observation belongs to based on a
 
 We will create a function that takes a JSON array of measurements as input and returns JSON with the predicted class and class membership probabilities corresponding to the measurements.
 
-## Prerequisites
+> You will learn how to pre-load trained model objects to make predictions.
 
-__Step 1.__ Install the [OpenFaaS CLI](https://docs.openfaas.com/cli/install/).
-
-__Step 2.__ Set up your [k8s, k3s, or faasd with OpenFaaS](https://docs.openfaas.com/deployment/).
-
-__Step 3.__ Use `docker login` to log into your registry of choice for pushing images.
-Export your Docher Hub user or organization name:
-
-```bash
-export OPENFAAS_PREFIX="" # Populate with your Docker Hub username
-```
-
-__Step 4.__ Log into your OpenFaaS instance (see more info [here](https://github.com/openfaas/workshop/blob/master/lab1b.md)):
-
-```bash
-export OPENFAAS_URL="http://174.138.114.98:8080" # Populate with your OpenFaaS URL
-
-# This command retrieves your password
-PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode; echo)
-
-# This command logs in and saves a file to ~/.openfaas/config.yml
-echo -n $PASSWORD | faas-cli login --username admin --password-stdin
-```
-
-Note: use `http://127.0.0.1:8080` as your OpenFaaS URL when using port forwarding via:
-
-```bash
-kubectl port-forward svc/gateway -n openfaas 8080:8080
-```
+You'll need the prerequisites listed [here](https://github.com/analythium/openfaas-rstats-templates/tree/master/examples).
 
 ## Create a new function using a template
-
-Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
-
-```bash
-faas-cli template pull https://github.com/analythium/openfaas-rstats-templates
-```
-
-This example uses the `rstats-base-plumber` template.
 
 Create a new function called `r-iris`.
 
@@ -52,13 +17,9 @@ Create a new function called `r-iris`.
 faas-cli new --lang rstats-base-plumber r-iris
 ```
 
-Note: we dropped the `--prefix=dockeruser` prefix because we exported `OPENFAAS_PREFIX` above.
-
 ## Customize the function
 
 Edit the `./r-iris/DESCRIPTION` file.
-Note: `r-base` based images install from source, thus avoiding most of build issues
-related to using pre-build packages.
 
 ```yaml
 Package: OpenFaaStR
@@ -70,7 +31,7 @@ SystemRequirements:
 VersionedPackages:
 ```
 
-Open R and perform model training, then save the trained model into `./r-iris/model.rda`:
+Open R and perform model training, then save the trained model into `./r-iris/model.rda` (see the file [model.rda](model.rda) file):
 
 ```R
 library(e1071) # library with SVM function
@@ -114,10 +75,11 @@ When reading in the rda file, we don't need the directory because the file will 
 
 ```R
 library(e1071)
-
 model <- readRDS("model.rda")
-
-handle <- function(req) {
+#* Iris
+#* @serializer unboxedJSON
+#* @post /
+function(req) {
   x <- as.data.frame(
     jsonlite::fromJSON(paste(req$postBody))
   )
@@ -142,15 +104,15 @@ faas-cli up -f r-iris.yml
 
 ## Testing
 
-Test the Docker image locally after `docker run -p 4000:8080 $OPENFAAS_PREFIX/r-iris`:
+Test the Docker image locally after `docker run -p 5000:8080 $OPENFAAS_PREFIX/r-iris`:
 
 ```bash
-curl http://localhost:4000/ -H \
+curl http://localhost:5000/ -H \
   "Content-Type: application/json" -d \
   '{"Sepal.Length":5.2,"Sepal.Width":3.4,"Petal.Length":1.5,"Petal.Width":0.2}'
 ```
 
-Test we can test teh deployed instance in the [UI](https://docs.openfaas.com/architecture/gateway/) or with curl:
+Test the deployed instance:
 
 ```bash
 curl $OPENFAAS_URL/function/r-iris -H \
@@ -160,13 +122,13 @@ curl $OPENFAAS_URL/function/r-iris -H \
 
 The output should include the predicted species name and the probabilities:
 
-```bash
+```json
 {
-    "species":["setosa"],
-    "probabilities":{
-        "setosa":[0.9779],
-        "versicolor":[0.0128],
-        "virginica":[0.0093]
-    }
+  "species": "setosa",
+  "probabilities": {
+    "setosa": 0.9781,
+    "versicolor": 0.0126,
+    "virginica": 0.0093
+  }
 }
 ```
