@@ -13,7 +13,7 @@ source("handler.R")
 pr$handle("POST", "/", function(req, res) {
   tryCatch(handle(req), error = function(e) {
     res$status <- 400
-    return(list(error = e))
+    return(list(error = as.character(e)))
   })
 })
 
