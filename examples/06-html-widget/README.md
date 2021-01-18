@@ -1,8 +1,8 @@
 # HTML Widget
 
-We will create a HTML widget that can be embedded into websites or BI tools using e.g. iframe.
+We will create a function that returns a self contained HTML widget that can be embedded into websites or BI tools as an e.g. iframe.
 
-> You will learn how to ...
+> You will learn how to make custom Plotly graphs based on URL parameters.
 
 You'll need the prerequisites listed [here](https://github.com/analythium/openfaas-rstats-templates/tree/master/examples).
 
@@ -59,12 +59,11 @@ function(value, min, max, title) {
     min <- 0
   if (missing(max))
     max <- 100
-  w <- gauge(value, min, max, title)
-  saveWidget(w, "index.html")
+  gauge(value, min, max, title)
 }
 ```
 
-Edit the `r-pca.yml` file as required, see [configuration](https://docs.openfaas.com/reference/yaml/) options.
+Edit the `r-widget.yml` file as required, see [configuration](https://docs.openfaas.com/reference/yaml/) options.
 
 ## Build, push, deploy the function
 

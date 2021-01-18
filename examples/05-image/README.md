@@ -104,7 +104,7 @@ function(req) {
 }
 ```
 
-Edit the `r-pca.yml` file as required, see [configuration](https://docs.openfaas.com/reference/yaml/) options.
+Edit the `r-image.yml` file as required, see [configuration](https://docs.openfaas.com/reference/yaml/) options.
 
 ## Build, push, deploy the function
 
