@@ -6,6 +6,7 @@ This folder contains the following worked examples:
 - [Principal Component Analysis](01-principal-components/README.md)
 - [Classification](02-classification/README.md)
 - [Time Series Forecast](03-time-series-forecast/README.md)
+- [Report Generation](04-report/README.md)
 
 ## Prerequisites
 
