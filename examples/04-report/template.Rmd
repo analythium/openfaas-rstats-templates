@@ -1,0 +1,14 @@
+---
+title: Report for {{name}}
+output: word_document
+---
+
+# Hello {{name}}!
+
+This document was _auto generated_ on {{date}}.
+The graph shows the Normal distribution
+with mean $\mu={{mean}}$ and variance $\sigma^2=`r {{stddev}}^2`$.
+
+```{r}
+hist(rnorm(10^4, {{mean}}, {{stddev}}), main="", xlab="", col="gold")
+```
