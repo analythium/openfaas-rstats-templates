@@ -157,9 +157,11 @@ You can also modify the `Dockerfile` in the template if specific
 R version or further customization is needed.
 
 System requirements for the same package might be different across
-Linux distros. This is a grey area of the R package ecosystem, see
-[rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
-and [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb) for help.
+Linux distros. This is a grey area of the R package ecosystem, see these links for help:
+
+- [rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
+- [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb)
+- [https://r-universe.dev/](https://r-universe.dev/)
 
 ## Contributing
 
