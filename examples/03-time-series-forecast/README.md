@@ -4,7 +4,7 @@
 
 We will create a function that pulls JSON data from public [COVID-19 data API](https://github.com/analythium/covid-19#readme), fits exponential smoothing model and returns the forecast results as JSON.
 
-> You will learn how to consume data from external APIs, fit exponential smoothing model, and forecast, use the request body or URL parameters.
+> You will learn how to consume data from external APIs, fit exponential smoothing model, and forecast, use the request body, URL parameters, or dynamic routing. We'll also learn about API annotation and HTTP statuses.
 
 You'll need the prerequisites listed [here](https://github.com/analythium/openfaas-rstats-templates/tree/master/examples).
 
@@ -171,7 +171,7 @@ Note: we have changed the function argument (from `req` to the arguments of the 
 Build, push, deploy the function:
 
 ```bash
-faas-cli up -f r-hello.yml
+faas-cli up -f r-covid.yml
 ```
 
 Test the Docker image locally after `docker run -p 5000:8080 $OPENFAAS_PREFIX/r-covid`:
@@ -198,3 +198,68 @@ Note: only the `region` parameter is mandatory, the the other two defaults to
 `cases="confirmed"` and `window=14`.
 `OPENFAAS_URL/function/r-covid?region=us` will be the same as
 `OPENFAAS_URL/function/r-covid?region=us&window=14`.
+
+## Use dynamic routing
+
+Edit the `./r-covid/handler.R` file. Note: we also include better error handling. `stop()` messages only show up in logs. HTTP response status code and message will be displayed by the browser and aid troubleshooting on the client side. We also use more [annotations](https://www.rplumber.io/articles/annotations.html) to aid the OpenAPI info returned on the `/__docs__/` endpoint (see below). Dynamic routing for Plumber is explained [here](https://www.rplumber.io/articles/routing-and-input.html#dynamic-routes-1).
+
+```R
+library(forecast)
+
+covid_forecast <- function(region, cases="confirmed", window=14) {
+    ## check arguments
+    cases <- match.arg(cases, c("confirmed", "deaths"))
+    window <- round(window)
+    if (window < 1) 
+      stop("window must be > 0")
+    ## API endpoint for region in global data set
+    ## available values: https://hub.analythium.io/covid-19/api/v1/regions/
+    u <- paste0("https://hub.analythium.io/covid-19/api/v1/regions/", region)
+    x <- jsonlite::fromJSON(u) # will throw error if region is not found
+    ## time series: daily new cases
+    y <- pmax(0, diff(x$rawdata[[cases]]))
+    ## last date
+    l <- as.Date(x$rawdata$date[length(x$rawdata$date)])
+    ## fit ETS
+    m <- ets(y)
+    ## forecaset based on model and window
+    f <- forecast(m, h=window)
+    ## process forecast
+    p <- cbind(Date=seq(l+1, l+window, 1), as.data.frame(f))
+    p[p < 0] <- 0
+    as.list(p)
+}
+
+#* COVID
+#* @param region:string region name
+#* @param cases:string cases (confirmed or deaths)
+#* @param window:integer forecasting horizon in days
+#* @get /<region>/<cases>/<window>
+function(region, cases, window, res) {
+  if (missing(cases))
+    cases <- "confirmed"
+  if (missing(window))
+    window <- 14
+  out <- try(covid_forecast(region, cases, as.numeric(window)))
+  if (inherits(out, "try-error")) {
+    res$status <- 400 # Bad Request
+    return(list(error=as.character(out)))
+  }
+  out
+}
+```
+
+Build, push, deploy the function:
+
+```bash
+faas-cli up -f r-covid.yml
+```
+
+Test the Docker image locally after `docker run -p 5000:8080 $OPENFAAS_PREFIX/r-covid`,
+then visit `http://localhost:5000/us/deaths/4`
+
+Test the deployed instance: `OPENFAAS_URL/function/r-covid/us/deaths/4`.
+
+Check out and explore the OpenAPI documentation at `OPENFAAS_URL/function/r-covid/__docs__`.
+
+Note: all parameters are required with dynamic routing.
