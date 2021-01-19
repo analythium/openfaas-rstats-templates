@@ -6,9 +6,9 @@ This folder contains the following worked examples:
 - [Principal Component Analysis](01-principal-components/README.md)
 - [Classification](02-classification/README.md)
 - [Time Series Forecast](03-time-series-forecast/README.md)
-- [Report Generation](04-report/README.md)
-- [Image Generation](05-image/README.md)
-- [HTML Widget](06-html-widget/README.md)
+- [Image Generation](04-image/README.md)
+- [HTML Widget](05-html-widget/README.md)
+- [Report Generation](06-report/README.md)
 
 ## Prerequisites
 
