@@ -73,5 +73,6 @@ The templates are using the following base images:
 
 System requirements for the same packages might be different across
 Linux distros. This is a grey area of the R package ecosystem, see
-[rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
-and [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb) for help.
+[rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements),
+[r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb),
+and [https://r-universe.dev/](https://r-universe.dev/) for help.
