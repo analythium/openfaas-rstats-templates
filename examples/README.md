@@ -4,11 +4,11 @@ This folder contains the following worked examples:
 
 - [Hello World](00-hello/README.md)
 - [Principal Component Analysis](01-principal-components/README.md)
-- [Classification](02-classification/README.md)
-- [Time Series Forecast](03-time-series-forecast/README.md)
-- [Image Generation](04-image/README.md)
-- [HTML Widget](05-html-widget/README.md)
-- [Report Generation](06-report/README.md)
+
+More examples are on the way.
+Please submit a PR if you have an interesting use case that
+you'd like to see here, or add your suggestions to
+[this](https://github.com/analythium/openfaas-rstats-templates/issues/20) issue.
 
 ## Prerequisites
 
