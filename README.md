@@ -143,7 +143,7 @@ Both should give the JSON output `"Hello World!"`.
 You can now edit `./hello-rstats/handler.R` to your liking.
 Don't forget to add dependencies to `./hello-rstats/DESCRIPTION` file.
 
-See [worked examples](examples/README.md) for different use cases,
+See [worked examples](https://github.com/analythium/openfaas-rstats-examples) for different use cases,
 and the [structure of the templates](template/README.md) if advanced tuning is required.
 
 The template installs dependencies specified in the `DESCRIPTION` file
