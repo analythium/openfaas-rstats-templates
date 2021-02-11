@@ -1,4 +1,4 @@
-language: rstats-ubuntu-plumber
+language: rstats-ubuntu-fiery
 fprocess: Rscript index.R
 welcome_message: |
   You have created a new function which uses R and the OpenFaaS 
