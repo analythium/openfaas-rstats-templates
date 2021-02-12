@@ -1,0 +1,12 @@
+Package: OpenFaaStR
+Version: 0.0.1
+Title: Add dependencies for handler.R
+Description:
+  Add CRAN packages to Imports or VersionedPackages,
+  add GitHub etc packages to Remotes,
+  and list OS specific system requirements.
+  Add Author and License field as needed.
+Imports:
+Remotes:
+SystemRequirements:
+VersionedPackages:

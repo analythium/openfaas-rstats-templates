@@ -38,6 +38,9 @@ The `/template` folder contains the following OpenFaaS templates:
 | [rstats-base-fiery](template/rstats-base-fiery) | rocker/r-base | of-watchdog | fiery |
 | [rstats-ubuntu-fiery](template/rstats-ubuntu-fiery) | rocker/r-ubuntu | of-watchdog | fiery |
 | [rstats-minimal-fiery](template/rstats-minimal-fiery) | rhub/r-minimal | of-watchdog | fiery |
+| [rstats-base-ambiorix](template/rstats-base-ambiorix) | rocker/r-base | of-watchdog | ambiorix |
+| [rstats-ubuntu-ambiorix](template/rstats-ubuntu-ambiorix) | rocker/r-ubuntu | of-watchdog | ambiorix |
+| [rstats-minimal-ambiorix](template/rstats-minimal-ambiorix) | rhub/r-minimal | of-watchdog | ambiorix |
 
 The templates differ with respect to:
 
@@ -69,11 +72,12 @@ Frameworks are listed in the order of their dependence relationships:
   - [plumber](https://www.rplumber.io/)
   - [fiery](https://CRAN.R-project.org/package=fiery)
   - [beakr](https://CRAN.R-project.org/package=beakr)
+  - [ambiorix](https://ambiorix.john-coene.com/)
 
 More server frameworks are being explored, such as the 
 [Rserve](https://www.rforge.net/Rserve/) based [RestRserve](https://restrserve.org/),
 or the httpuv based [opencpu](https://www.opencpu.org/).
-See [**ROADMAP**](/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
+See [**ROADMAP**](https://github.com/analythium/openfaas-rstats-templates/issues/19) for details. **PRs are welcome!**
 
 ## Usage
 
