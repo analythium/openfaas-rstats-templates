@@ -2,9 +2,9 @@
 
 This directory contains the _stable_ OpenFaaS R templates.
 
-## Structure
+## Template structure
 
-The templates follow similar structure:
+The templates follow a similar structure:
 
 ```tree
 .
@@ -24,13 +24,13 @@ The templates follow similar structure:
 - `./Rprofile.site`: R startup options, e.g. repositories, etc.,
 - `./function/DESCRIPTION`: R package dependencies for the handler to be edited by the user,
 - `./function/handler.R`: R handler to be edited by the user,
-- `./index.R`: this is the R entry point receiving and outputting the request,
-- `./install.R`: utility function used to handle dependencies in the Dockerfile,
-- `./template.yml`: this file specifies the language for the template and the init process for your container.
+- `./index.R`: this is the R entry point receiving the request and outputting the response,
+- `./install.R`: utility function used to handle dependencies in the `Dockerfile`,
+- `./template.yml`: stack file specifying the language for the template and the init process for your container, see the [YAML reference](https://docs.openfaas.com/reference/yaml/) for additional details.
 
 The files the users are supposed to edit are inside the function folder,
 users might put other files here that will be copied into the `/home/app`
-folder of the Docker image. The handler file contains a function called
+folder of the Docker image. The handler file _usually_ contains a function called
 `handler` that the `index.R` entry point calls. See the template readme file
 for specific instructions.
 
@@ -44,7 +44,7 @@ The `Dockerfile` install script handles dependencies as specified in the
 3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
 4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and commas inside parenthesis are important).
 
-For example `DESCRIPTION` file:
+An example `DESCRIPTION` file might look like this:
 
 ```yaml
 Package: OpenFaaS

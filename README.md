@@ -84,14 +84,14 @@ See [**ROADMAP**](https://github.com/analythium/openfaas-rstats-templates/issues
 ### Setup
 
 It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first
-and set up a local or remote Kubernetes or Docker Swarm installation with
-OpenFaaS deployed to the cluster (see docs [here](https://docs.openfaas.com/deployment/)).
-To get going quickly,
+and set up a local or remote [Kubernetes cluster](https://docs.openfaas.com/deployment/kubernetes/) or [faasd](https://docs.openfaas.com/deployment/faasd/) with
+OpenFaaS deployed. To get going quickly,
 follow the official OpenFaaS [workshop](https://docs.openfaas.com/tutorials/workshop/),
-or enroll into the free
+read the book [Serverless For Everyone Else](https://gumroad.com/l/serverless-for-everyone-else) by Alex Ellis, or enroll into the free
 [Introduction to Serverless on Kubernetes](https://www.edx.org/course/introduction-to-serverless-on-kubernetes) course.
 
-See recommended [setup steps](examples/README.md) for the R template examples.
+See recommended [setup steps](https://github.com/analythium/openfaas-rstats-examples) for the R template examples.
+
 ### Make a new function
 
 Use the [`faas-cli`](https://github.com/openfaas/faas-cli) and pull R templates:
@@ -105,10 +105,11 @@ Now `faas-cli new --list` should give you a list with the available `rstats-*` t
 Create a new function called `hello-rstats`:
 
 ```bash
-faas-cli new --lang rstats-base hello-rstats --prefix=dockeruser
+export OPENFAAS_PREFIX="" # Populate with your Docker Hub username
+faas-cli new --lang rstats-base hello-rstats --prefix=$OPENFAAS_PREFIX
 ```
 
-the `dockeruser` means a user or organization on e.g. Docker Hub where
+the `OPENFAAS_PREFIX` means a user or organization on e.g. Docker Hub where
 you have push privileges; don't forget to log in to the registry using `docker login`.
 
 Your folder now should contain the following:
@@ -119,8 +120,8 @@ hello-rstats/DESCRIPTION
 hello-rstats.yml
 ```
 
-The `handler.R` file does the heavy lifting by executing the desired
-functionality. `DESCRIPTION` lists the dependencies.
+The `hello-rstats/handler.R` file does the heavy lifting by executing the desired
+functionality. `hello-rstats/DESCRIPTION` lists the dependencies.
 The `hello-rstats.yml` is the stack file used to configure functions
 (read more [here](https://docs.openfaas.com/reference/yaml/)).
 
@@ -144,25 +145,25 @@ Both should give the JSON output `"Hello World!"`.
 
 ### Customize your function
 
-You can now edit `./hello-rstats/handler.R` to your liking.
-Don't forget to add dependencies to `./hello-rstats/DESCRIPTION` file.
+You can now edit `hello-rstats/handler.R` to your liking.
+Don't forget to add dependencies to the `hello-rstats/DESCRIPTION` file.
 
-See [worked examples](https://github.com/analythium/openfaas-rstats-examples) for different use cases,
-and the [structure of the templates](template/README.md) if advanced tuning is required.
+See [worked examples](https://github.com/analythium/openfaas-rstats-examples) for different use cases.
+Read more about the [structure of the templates](template/README.md) if advanced tuning is required, e.g. by editing the `Dockerfile`, etc.
 
 The template installs dependencies specified in the `DESCRIPTION` file
 in this order:
 
-1. `SystemRequirements:` list OS specific sysreqs here, comma separated, these are then installed by the OS's package manager,
+1. `SystemRequirements:` list OS specific system requirements here, comma separated, these are then installed by the OS's package manager,
 2. CRAN packages listed in `Depends:`, `Imports:`, `LinkingTo:` fields are installed by `remotes::install_deps()`,
-3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specs, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
+3. `Remotes:` fields are installed according to [remotes](https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html) specifications, make sure to list the package in `Imports:` as well, the location specified in `Remotes:` will be used to get the package from,
 4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and after commas inside parentheses are important, e.g. `devtools (1.11.0), mypackage (>= 1.12.0, < 1.14)`).
 
 You can also modify the `Dockerfile` in the template if specific
 R version or further customization is needed.
 
 System requirements for the same package might be different across
-Linux distros. This is a grey area of the R package ecosystem, see these links for help:
+Linux distributions. This is a grey area of the R package ecosystem, see these links for help:
 
 - [rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
 - [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb)
@@ -175,4 +176,4 @@ Sign commits that are submitted as PR.
 
 ## License
 
-Copyright (c) 2018, Peter Solymos, Analythium Solutions Inc. [MIT](LICENSE.md)
+Copyright (c) 2020, Peter Solymos, Analythium Solutions Inc. [MIT](LICENSE.md)
