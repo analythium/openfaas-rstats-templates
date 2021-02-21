@@ -1,4 +1,4 @@
-FROM openfaas/classic-watchdog:0.20.1 as watchdog
+FROM ghcr.io/openfaas/classic-watchdog:0.1.5 as watchdog
 FROM rhub/r-minimal:latest
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
