@@ -167,7 +167,8 @@ Linux distributions. This is a grey area of the R package ecosystem, see these l
 
 - [rstudio/r-system-requirements](https://github.com/rstudio/r-system-requirements)
 - [r-hub/sysreqsdb](https://github.com/r-hub/sysreqsdb)
-- [https://r-universe.dev/](https://r-universe.dev/)
+- [r-universe/](https://r-universe.dev/)
+- [maketools](https://cran.r-project.org/web/packages/maketools/vignettes/sysdeps.html) to determine run-time and build-time dependencies
 
 ## Contributing
 
