@@ -52,7 +52,7 @@ docker run -p 4000:8080 dockeruser/r-ubuntu-fiery-hello
 Curl should return `["Hello Friend!"]`:
 
 ```bash
-curl http://localhost:4000/ -d '["Friend"]'
+curl http://localhost:4000/ -d '["Friend"]' -H 'Content-Type: application/json'
 # ["Hello Friend!"]
 ```
 
