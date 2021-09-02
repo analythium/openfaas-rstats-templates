@@ -47,3 +47,20 @@ curl $OPENFAAS_URL/function/$FUNCTION_NAME \
 faas-cli remove -f $FUNCTION_NAME.yml
 rm $FUNCTION_NAME.yml
 rm -r $FUNCTION_NAME
+
+## --
+
+docker images --filter=reference='*/r-rstats-*' --format "{{.Repository}}\t{{.Size}}"
+
+#psolymos/r-rstats-base-plumber      927MB
+#psolymos/r-rstats-base-fiery        934MB
+#psolymos/r-rstats-base-httpuv       873MB
+#psolymos/r-rstats-base-beakr        923MB
+#psolymos/r-rstats-base-ambiorix     921MB
+#psolymos/r-rstats-base              833MB
+#psolymos/r-rstats-ubuntu-ambiorix   884MB
+#psolymos/r-rstats-ubuntu-beakr      849MB
+#psolymos/r-rstats-ubuntu            768MB
+#psolymos/r-rstats-ubuntu-fiery      860MB
+#psolymos/r-rstats-ubuntu-httpuv     804MB
+#psolymos/r-rstats-ubuntu-plumber    853MB
