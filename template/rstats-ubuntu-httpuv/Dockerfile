@@ -1,5 +1,8 @@
-FROM ghcr.io/openfaas/of-watchdog:0.8.4 as watchdog
-FROM rocker/r-ubuntu:18.04
+ARG WATCHDOG_VERSION="0.8.4"
+ARG R_IMAGE="rocker/r-ubuntu:20.04"
+
+FROM ghcr.io/openfaas/of-watchdog:${WATCHDOG_VERSION} as watchdog
+FROM ${R_IMAGE}
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -20,22 +23,14 @@ ENV _R_SHLIB_STRIP_=true
 
 # Install basic dependencies for index.R
 # some packages seem to require build from source
-RUN install2.r -e remotes
-RUN R -q -e 'install.packages(c("Rcpp", "httpuv"), repos=c(CRAN = "https://cloud.r-project.org"))'
+RUN R -q -e 'install.packages(c("Rcpp", "httpuv", "remotes"), repos=c(CRAN = "https://cloud.r-project.org"))'
 
 COPY install.R /usr/local/bin/
 
-# Create a non-root user
-RUN addgroup --system app \
-    && adduser --system --ingroup app app
-
-WORKDIR /home/app
-
-COPY index.R           .
-COPY function          .
+COPY function/DESCRIPTION     .
 
 # Istall SystemRequirements for handler.R from DESCRIPTION
-RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
+RUN R -q -e 'source("/usr/local/bin/install.R");install$sysreqs()'
 RUN echo requirements.txt
 RUN apt-get update
 RUN xargs -a requirements.txt apt-get install -y --no-install-recommends
@@ -46,7 +41,19 @@ RUN rm requirements.txt
 RUN R -q -e 'remotes::install_deps()'
 
 # Install VersionedPackages for handler.R from DESCRIPTION
-RUN R -q -e 'source("/usr/local/bin/install.R"); install$versioned()'
+RUN R -q -e 'source("/usr/local/bin/install.R");install$versioned()'
+
+RUN rm -f ./DESCRIPTION
+
+
+# Create a non-root user
+RUN addgroup --system app \
+    && adduser --system --ingroup app app
+
+WORKDIR /home/app
+
+COPY index.R           .
+COPY function          .
 
 # Switch to app user
 RUN chown app:app -R /home/app

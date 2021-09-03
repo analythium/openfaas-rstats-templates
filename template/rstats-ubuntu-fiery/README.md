@@ -52,7 +52,7 @@ docker run -p 4000:8080 dockeruser/r-ubuntu-fiery-hello
 Curl should return `["Hello Friend!"]`:
 
 ```bash
-curl http://localhost:4000/ -d '["Friend"]'
+curl http://localhost:4000/ -d '["Friend"]' -H 'Content-Type: application/json'
 # ["Hello Friend!"]
 ```
 
@@ -76,7 +76,7 @@ Use the OpenFaaS UI or curl (should give `["Hello Friend!"]`).
 Replace `localhost` with IP address if testing on remote location:
 
 ```bash
-curl http://localhost:8080/function/<function-name> -d '["Friend"]'
+curl http://localhost:8080/function/<function-name> -H 'Content-Type: application/json' -d '["Friend"]'
 # ["Hello Friend!"]
 ```
 
