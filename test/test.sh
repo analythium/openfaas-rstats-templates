@@ -52,15 +52,21 @@ rm -r $FUNCTION_NAME
 
 docker images --filter=reference='*/r-rstats-*' --format "{{.Repository}}\t{{.Size}}"
 
-#psolymos/r-rstats-base-plumber      927MB
+#psolymos/r-rstats-base              833MB
+#psolymos/r-rstats-base-ambiorix     921MB
+#psolymos/r-rstats-base-beakr        923MB
 #psolymos/r-rstats-base-fiery        934MB
 #psolymos/r-rstats-base-httpuv       873MB
-#psolymos/r-rstats-base-beakr        923MB
-#psolymos/r-rstats-base-ambiorix     921MB
-#psolymos/r-rstats-base              833MB
+#psolymos/r-rstats-base-plumber      927MB
+#psolymos/r-rstats-ubuntu            768MB
 #psolymos/r-rstats-ubuntu-ambiorix   884MB
 #psolymos/r-rstats-ubuntu-beakr      849MB
-#psolymos/r-rstats-ubuntu            768MB
 #psolymos/r-rstats-ubuntu-fiery      860MB
 #psolymos/r-rstats-ubuntu-httpuv     804MB
 #psolymos/r-rstats-ubuntu-plumber    853MB
+#psolymos/r-rstats-minimal           286MB
+#psolymos/r-rstats-minimal-ambiorix  488MB
+#psolymos/r-rstats-minimal-beakr     388MB
+#psolymos/r-rstats-minimal-fiery     400MB
+#psolymos/r-rstats-minimal-httpuv    349MB
+#psolymos/r-rstats-minimal-plumber   392MB
