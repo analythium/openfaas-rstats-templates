@@ -2,12 +2,12 @@
 
 <img src="https://hub.analythium.io/assets/web/faastr.png" align="right" style="padding-left:10px;background-color:white;" />
 
-> This project provides [OpenFaaS](https://www.openfaas.com/)
-> templates for the [R](https://www.r-project.org/) language.
+> [OpenFaaS](https://www.openfaas.com/) templates
+> for the [R](https://www.r-project.org/) language.
 
 - [R (rstats) templates for OpenFaaS](#r-rstats-templates-for-openfaas)
   - [Introduction](#introduction)
-    - [Base image](#base-image)
+    - [Parent image](#parent-image)
     - [Watchdog type](#watchdog-type)
     - [Server framework (for of-watchdog only)](#server-framework-for-of-watchdog-only)
   - [Usage](#usage)
@@ -44,11 +44,11 @@ The `/template` folder contains the following OpenFaaS templates:
 
 The templates differ with respect to:
 
-- R base image,
+- R parent image,
 - watchdog type, and
 - the server framework used.
 
-### Base image
+### Parent image
 
 - Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
 - Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
@@ -58,8 +58,8 @@ See the [Rocker](https://journal.r-project.org/archive/2017/RJ-2017-065/RJ-2017-
 
 ### Watchdog type
 
-- The [watchdog](https://github.com/openfaas/faas/tree/master/watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via STDIN and reads a HTTP response via STDOUT.
-- The _http mode_ of the [of-watchdog](https://github.com/openfaas-incubator/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching).
+- The [classic watchdog](https://github.com/openfaas/classic-watchdog) is a tiny Golang webserver that marshals an HTTP request accepted on the API Gateway and to invoke your chosen application. This is the init process for your container. The classic watchdog passes in the HTTP request via STDIN and reads a HTTP response via STDOUT.
+- The _http mode_ of the [of-watchdog](https://github.com/openfaas/of-watchdog) provides more control over your HTTP responses ("hot functions", persistent connection pools, or caching).
 
 The of-watchdog _http mode_ loads the handler as a small background web server.
 The classic watchdog's forking mode would instead load this file for every invocation creating additional latency when loading packages, saved data, or trained models.
@@ -110,7 +110,7 @@ faas-cli new --lang rstats-base hello-rstats --prefix=$OPENFAAS_PREFIX
 ```
 
 the `OPENFAAS_PREFIX` means a user or organization on e.g. Docker Hub where
-you have push privileges; don't forget to log in to the registry using `docker login`.
+you have push privileges; don't forget to log in to your registry using `docker login`.
 
 Your folder now should contain the following:
 
@@ -121,7 +121,7 @@ hello-rstats.yml
 ```
 
 The `hello-rstats/handler.R` file does the heavy lifting by executing the desired
-functionality. `hello-rstats/DESCRIPTION` lists the dependencies.
+functionality. `hello-rstats/DESCRIPTION` lists the dependencies for the handler.
 The `hello-rstats.yml` is the stack file used to configure functions
 (read more [here](https://docs.openfaas.com/reference/yaml/)).
 
@@ -160,7 +160,13 @@ in this order:
 4. `VersionedPackages:` this field can be used to pin package versions using `remotes::install_version()`, do not list these packages in other fields (spaces after operators and after commas inside parentheses are important, e.g. `devtools (1.11.0), mypackage (>= 1.12.0, < 1.14)`).
 
 You can also modify the `Dockerfile` in the template if specific
-R version or further customization is needed.
+R version or further customization is needed. The R parent image is defined as a Docker `ARG` called `R_IMAGE`that you can override. I.e. use the versioned Rocker Debian image using [custom build arguments](https://docs.openfaas.com/cli/build/#30-pass-custom-build-arguments):
+
+```bash
+faas-cli new --lang rstats-base-plumber hello-rstats-2 --prefix=$OPENFAAS_PREFIX
+
+faas-cli build -f hello-rstats-2.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
+```
 
 System requirements for the same package might be different across
 Linux distributions. This is a grey area of the R package ecosystem, see these links for help:

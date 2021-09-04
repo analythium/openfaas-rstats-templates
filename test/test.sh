@@ -58,15 +58,32 @@ docker images --filter=reference='*/r-rstats-*' --format "{{.Repository}}\t{{.Si
 #psolymos/r-rstats-base-fiery        934MB
 #psolymos/r-rstats-base-httpuv       873MB
 #psolymos/r-rstats-base-plumber      927MB
+
 #psolymos/r-rstats-ubuntu            768MB
 #psolymos/r-rstats-ubuntu-ambiorix   884MB
 #psolymos/r-rstats-ubuntu-beakr      849MB
 #psolymos/r-rstats-ubuntu-fiery      860MB
 #psolymos/r-rstats-ubuntu-httpuv     804MB
 #psolymos/r-rstats-ubuntu-plumber    853MB
+
 #psolymos/r-rstats-minimal           286MB
 #psolymos/r-rstats-minimal-ambiorix  488MB
 #psolymos/r-rstats-minimal-beakr     388MB
 #psolymos/r-rstats-minimal-fiery     400MB
 #psolymos/r-rstats-minimal-httpuv    349MB
 #psolymos/r-rstats-minimal-plumber   392MB
+
+
+export FNNAME="hello-r"
+faas-cli new --lang rstats-base-plumber $FNNAME --prefix=$OPENFAAS_PREFIX
+
+faas-cli build -f $FNNAME.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
+
+faas-cli remove -f $FNNAME.yml
+rm $FNNAME.yml
+rm -r $FNNAME
+
+
+faas-cli new --lang rstats-base-plumber hello-rstats-2 --prefix=$OPENFAAS_PREFIX
+
+faas-cli build -f hello-rstats-2.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
