@@ -64,7 +64,7 @@ VersionedPackages:
 ```
 
 You can also modify the `Dockerfile` in the template if specific
-R version or further customization is needed. The R parent image is defined as a Docker `ARG` called `R_IMAGE`that you can override. I.e. use the versioned Rocker Debian image using [custom build arguments](https://docs.openfaas.com/cli/build/#30-pass-custom-build-arguments): `--build-arg R_IMAGE=rocker/r-base:4.0.0`, etc.
+R version or further customization is needed. The R parent image is defined as a Docker `ARG` called `R_IMAGE`that you can override. I.e. use the versioned Rocker Debian image using [custom build arguments](https://docs.openfaas.com/cli/build/#30-pass-custom-build-arguments): `--build-arg R_IMAGE=rocker/r-base:4.0.0`, etc. You can also edit the [stack YAML file](https://docs.openfaas.com/reference/yaml/#function-build-args-build-args).
 
 The templates are using the following parent images:
 

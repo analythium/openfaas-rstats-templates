@@ -168,6 +168,18 @@ faas-cli new --lang rstats-base-plumber hello-rstats-2 --prefix=$OPENFAAS_PREFIX
 faas-cli build -f hello-rstats-2.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
 ```
 
+You can also edit the [stack YAML file](https://docs.openfaas.com/reference/yaml/#function-build-args-build-args):
+
+```yaml
+...
+functions:
+  hello-rstats-2:
+    lang: rstats-base-plumber
+...
+    build_args:
+      R_IMAGE: rocker/r-base:4.0.0
+```
+
 System requirements for the same package might be different across
 Linux distributions. This is a grey area of the R package ecosystem, see these links for help:
 
