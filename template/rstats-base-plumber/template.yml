@@ -4,4 +4,5 @@ welcome_message: |
   You have created a new function which uses R and the OpenFaaS 
   of-watchdog.
 
-  Include third-party dependencies in the DESCRIPTION file.
+  To include third-party dependencies, add packages, remotes,
+  and system dependencies to the DESCRIPTION file.
