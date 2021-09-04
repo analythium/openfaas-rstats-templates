@@ -31,7 +31,6 @@ COPY function/DESCRIPTION     .
 
 # Istall SystemRequirements for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R");install$sysreqs()'
-RUN echo requirements.txt
 RUN apt-get update
 RUN xargs -a requirements.txt apt-get install -y --no-install-recommends
 RUN rm -rf /var/lib/apt/lists/*

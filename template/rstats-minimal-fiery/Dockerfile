@@ -31,7 +31,6 @@ COPY function/DESCRIPTION     .
 
 # Istall SystemRequirements for handler.R from DESCRIPTION
 RUN R -q -e 'source("/usr/local/bin/install.R"); install$sysreqs()'
-RUN echo requirements.txt
 RUN apk update
 RUN apk add --no-cache gcc musl-dev g++ gfortran linux-headers
 RUN xargs -a requirements.txt apk add
