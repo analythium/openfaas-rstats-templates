@@ -63,9 +63,10 @@ VersionedPackages:
   mypackage (0.1.0)
 ```
 
-You might also have to meddle with the `Dockerfile` if specific
-R version or further customization is needed.
-The templates are using the following base images:
+You can also modify the `Dockerfile` in the template if specific
+R version or further customization is needed. The R parent image is defined as a Docker `ARG` called `R_IMAGE`that you can override. I.e. use the versioned Rocker Debian image using [custom build arguments](https://docs.openfaas.com/cli/build/#30-pass-custom-build-arguments): `--build-arg R_IMAGE=rocker/r-base:4.0.0`, etc.
+
+The templates are using the following parent images:
 
 - Debian-based `rocker/r-base` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-base) project for bleeding edge,
 - Ubuntu-based `rocker/r-ubuntu` Docker image from the [rocker](https://github.com/rocker-org/rocker/tree/master/r-ubuntu) project for long term support (uses [RSPM](https://packagemanager.rstudio.com/client/) binaries),
