@@ -179,7 +179,8 @@ Linux distributions. This is a grey area of the R package ecosystem, see these l
 ## Contributing
 
 Please read the [code of conduct](CODE_OF_CONDUCT.md).
-Sign commits that are submitted as PR.
+[DCO](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin) is required,
+sign commits that are submitted as PR (`git commit -s -m "Commit message"`).
 
 ## License
 
