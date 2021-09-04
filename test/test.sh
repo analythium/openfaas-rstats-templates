@@ -73,6 +73,7 @@ docker images --filter=reference='*/r-rstats-*' --format "{{.Repository}}\t{{.Si
 #psolymos/r-rstats-minimal-httpuv    349MB
 #psolymos/r-rstats-minimal-plumber   392MB
 
+## test build args
 
 export FNNAME="hello-r"
 faas-cli new --lang rstats-base-plumber $FNNAME --prefix=$OPENFAAS_PREFIX
@@ -87,3 +88,36 @@ rm -r $FNNAME
 faas-cli new --lang rstats-base-plumber hello-rstats-2 --prefix=$OPENFAAS_PREFIX
 
 faas-cli build -f hello-rstats-2.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
+
+# Debian - working
+# https://hub.docker.com/r/rocker/r-base/tags
+faas-cli new --lang rstats-base-plumber hello1 --prefix=$OPENFAAS_PREFIX
+faas-cli build -f hello1.yml --build-arg R_IMAGE=rocker/r-base:4.0.0
+
+# Debian - working
+# https://hub.docker.com/r/rocker/r-ver/tags
+faas-cli new --lang rstats-base-plumber hello2 --prefix=$OPENFAAS_PREFIX
+faas-cli build -f hello2.yml --build-arg R_IMAGE=rocker/r-ver:4.0.0
+
+# Ubuntu - working
+# https://hub.docker.com/r/rstudio/r-base/tags
+faas-cli new --lang rstats-ubuntu-plumber hello3 --prefix=$OPENFAAS_PREFIX
+faas-cli build -f hello3.yml --build-arg R_IMAGE=rstudio/r-base:4.0.0-focal
+
+# Ubuntu - working
+# https://hub.docker.com/r/rocker/r-ubuntu/tags
+faas-cli new --lang rstats-ubuntu-plumber hello4 --prefix=$OPENFAAS_PREFIX
+faas-cli build -f hello4.yml --build-arg R_IMAGE=rocker/r-ubuntu:18.04
+
+# Alpine - working
+# https://hub.docker.com/r/rhub/r-minimal/tags
+faas-cli new --lang rstats-minimal-plumber hello5 --prefix=$OPENFAAS_PREFIX
+faas-cli build -f hello5.yml --build-arg R_IMAGE=rhub/r-minimal:4.0
+
+docker images --filter=reference='*/hello*' --format "{{.Repository}}\t{{.Size}}"
+
+#psolymos/hello1  926MB
+#psolymos/hello2 1210GB
+#psolymos/hello3 1040GB
+#psolymos/hello4  746MB
+#psolymos/hello5  392MB
