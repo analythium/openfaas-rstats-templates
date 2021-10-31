@@ -86,9 +86,10 @@ See [**ROADMAP**](https://github.com/analythium/openfaas-rstats-templates/issues
 It is recommended to read the [OpenFaaS docs](https://docs.openfaas.com/) first
 and set up a local or remote [Kubernetes cluster](https://docs.openfaas.com/deployment/kubernetes/) or [faasd](https://docs.openfaas.com/deployment/faasd/) with
 OpenFaaS deployed. To get going quickly,
-follow the official OpenFaaS [workshop](https://docs.openfaas.com/tutorials/workshop/),
-read the book [Serverless For Everyone Else](https://gumroad.com/l/serverless-for-everyone-else) by Alex Ellis, or enroll into the free
+follow the official OpenFaaS [workshop](https://docs.openfaas.com/tutorials/workshop/), or enroll into the free
 [Introduction to Serverless on Kubernetes](https://www.edx.org/course/introduction-to-serverless-on-kubernetes) course.
+
+> If you are looking for the smallest footprint (single node), the book [Serverless For Everyone Else](https://gumroad.com/a/494294131/fKOcw) by Alex Ellis is highly recommended.
 
 See recommended [setup steps](https://github.com/analythium/openfaas-rstats-examples) for the R template examples.
 
