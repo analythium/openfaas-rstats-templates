@@ -17,7 +17,7 @@
   - [Contributing](#contributing)
   - [License](#license)
 
-<video src='https://www.youtube.com/embed/jLmE7jA-lHI' width=180/>
+**Read the [R Templates blog post](https://www.openfaas.com/blog/r-templates/) and watch this [useR!2021 video](https://youtu.be/jLmE7jA-lHI) for a quick intro!**
 
 ## Introduction
 
