@@ -17,6 +17,8 @@
   - [Contributing](#contributing)
   - [License](#license)
 
+<iframe width="744" height="419" src="https://www.youtube.com/embed/jLmE7jA-lHI" title="Data science serverless-style with R and OpenFaaS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Introduction
 
 The `/template` folder contains the following OpenFaaS templates:
